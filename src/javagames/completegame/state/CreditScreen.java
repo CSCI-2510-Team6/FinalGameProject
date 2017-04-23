@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 
+import javagames.util.KeyboardInput;
 import javagames.util.Matrix3x3f;
 import javagames.util.Utility;
 
@@ -16,7 +17,9 @@ import javagames.util.Utility;
  * @author Andres Ward
  *
  */
-public class CreditScreen extends NonStageScreen {
+public class CreditScreen extends State {
+
+  private KeyboardInput keys;
 
   // Text for the credits
   private static final String[] creditInfo = { "GAME TITLE - version 1.0",
@@ -26,7 +29,7 @@ public class CreditScreen extends NonStageScreen {
   @Override
   public void enter() {
     super.enter();
-
+    keys = (KeyboardInput) controller.getAttribute("keys");
     // Replace background parameter with actual background to be used
     // background = (Sprite) controller.getAttribute("background");
   }

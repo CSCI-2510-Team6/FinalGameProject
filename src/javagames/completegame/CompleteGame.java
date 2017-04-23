@@ -78,6 +78,8 @@ public class CompleteGame extends WindowFramework {
   @Override
   protected void terminate() {
     super.terminate();
+
+    // Kill all the music here
   }
 
   public static void main(final String[] args) {

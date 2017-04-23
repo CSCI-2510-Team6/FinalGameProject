@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 
+import javagames.util.KeyboardInput;
 import javagames.util.Matrix3x3f;
 import javagames.util.Utility;
 
@@ -16,11 +17,14 @@ import javagames.util.Utility;
  * @author Andres Ward
  *
  */
-public class TitleScreen extends NonStageScreen {
+public class TitleScreen extends State {
+
+  protected KeyboardInput keys;
 
   @Override
   public void enter() {
     super.enter();
+    keys = (KeyboardInput) controller.getAttribute("keys");
 
     // Replace background parameter with actual background to be used
     // background = (Sprite) controller.getAttribute("background");
@@ -31,8 +35,10 @@ public class TitleScreen extends NonStageScreen {
     super.processInput(delta);
 
     if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
-      // Transition to level select screen
-      getController().setState(new LevelSelect());
+      final GameState state = new GameState();
+      state.setLevel(1);
+      state.setLives(2);
+      getController().setState(new LevelStarting(state));
     }
   }
 

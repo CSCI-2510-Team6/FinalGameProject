@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,8 +14,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import javax.imageio.ImageIO;
+
+import collision.Collider;
+import collision.shapes.BoundingBox;
+import collision.shapes.BoundingShape;
 import javagames.util.Matrix3x3f;
+import javagames.util.ResourceLoader;
 import javagames.util.Utility;
+import javagames.util.Vector2f;
+import sprite.CollidableSprite;
+import sprite.Sorceress;
 
 /**
  * This class handles the initial loading of game assets into memory.
@@ -36,10 +47,62 @@ public class LoadGame extends State {
     threadPool = Executors.newCachedThreadPool();
     loadTasks = new ArrayList<>();
 
+    loadTasks.add(() -> {
+      final InputStream stream = ResourceLoader.load(LoadGame.class,
+          "res/assets/images/backgrounds/iceCastle.jpg",
+          "/images/backgrounds/iceCastle.jpg");
+      final BufferedImage image = ImageIO.read(stream);
+
+      // Initialize levelA background
+      final List<BoundingShape> backInner = new ArrayList<>();
+
+      // background inner bounding shapes
+      final BoundingBox bottom =
+          new BoundingBox(new Vector2f(16, -4f), new Vector2f(-16, -4.5f));
+      backInner.add(bottom);
+
+      // background collider object
+      final Collider backgroundCollider =
+          new Collider(new Vector2f(0, 0), 32.0f, 9.0f, backInner);
+      // Create the background collidable sprite
+      final CollidableSprite background =
+          new CollidableSprite(0, 0, 1280 * 2, 720, image, backgroundCollider);
+
+      controller.setAttribute("levelA", background);
+      return Boolean.TRUE;
+    });
+
+    loadTasks.add(() -> {
+      final InputStream stream = ResourceLoader.load(LoadGame.class,
+          "res/assets/images/characters/fumiko.png",
+          "/images/characters/fumiko.png");
+      final BufferedImage image = ImageIO.read(stream);
+
+      // Initialize hero
+      final Vector2f heroCenter = new Vector2f(-6, 0);
+
+      // hero inner bounding shape
+      final List<BoundingShape> heroInner = new ArrayList<>();
+      final Vector2f heroMaxA = heroCenter.add(new Vector2f(0.4f, 0.8f));
+      final Vector2f heroMinA = heroCenter.sub(new Vector2f(0.4f, 0.8f));
+      heroInner.add(new BoundingBox(heroMaxA, heroMinA));
+
+      // hero collider object
+      final Collider heroCollider =
+          new Collider(heroCenter, 0.8f, 1.6f, heroInner);
+      // Create the hero sprite
+      final Sorceress hero = new Sorceress(heroCenter.x, heroCenter.y, 864, 256,
+          image, heroCollider);
+
+      controller.setAttribute("hero", hero);
+      return Boolean.TRUE;
+    });
+
     loadResults = new ArrayList<>();
     for (final Callable<Boolean> task : loadTasks) {
       loadResults.add(threadPool.submit(task));
     }
+
     numberOfTasks = loadResults.size();
     if (numberOfTasks == 0) {
       numberOfTasks = 1;
