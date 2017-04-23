@@ -1,1 +1,11 @@
 image sources
+
+backgrounds
+
+iceCastle.jpeg
+http://www.desktop-image.com/game/2d-game-backgrounds-5/
+
+characters
+
+fumiko.png
+https://opengameart.org/content/fumiko-complete-charset
