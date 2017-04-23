@@ -172,4 +172,84 @@ public class Utility {
 
     return toScale;
   }
+
+  /**
+   * This method takes an image and desired sizes and determines which way to
+   * scale and returns an image mirrored over the y axis
+   *
+   * @param toScale
+   * @param targetWidth
+   * @param targetHeight
+   * @return
+   */
+  public static BufferedImage mirrorScaleImage(final BufferedImage toScale,
+      final int targetWidth, final int targetHeight) {
+    final int width = toScale.getWidth();
+    final int height = toScale.getHeight();
+    if ((targetWidth < width) || (targetHeight < height)) {
+      return Utility.mirrorScaleDownImage(toScale, targetWidth, targetHeight);
+    }
+    else {
+      return Utility.mirrorScaleUpImage(toScale, targetWidth, targetHeight);
+    }
+  }
+
+  /**
+   * This method enlarges an image, mirrors it about the y axis and uses
+   * bilinear interpolation
+   *
+   * @param toScale
+   * @param targetWidth
+   * @param targetHeight
+   * @return
+   */
+  public static BufferedImage mirrorScaleUpImage(final BufferedImage toScale,
+      final int targetWidth, final int targetHeight) {
+    final BufferedImage image = new BufferedImage(targetWidth, targetHeight,
+        BufferedImage.TYPE_INT_ARGB);
+    final Graphics2D g2d = image.createGraphics();
+    g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+        RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+    g2d.drawImage(toScale, image.getHeight(), 0, -1 * image.getWidth(),
+        image.getHeight(), null);
+    g2d.dispose();
+    return image;
+  }
+
+  /**
+   * This method enlarges an image, mirrors it about the y axis and uses bicubic
+   * interpolation
+   *
+   * @param toScale
+   * @param targetWidth
+   * @param targetHeight
+   * @return
+   */
+  public static BufferedImage mirrorScaleDownImage(BufferedImage toScale,
+      final int targetWidth, final int targetHeight) {
+
+    int w = toScale.getWidth();
+    int h = toScale.getHeight();
+    do {
+      w = w / 2;
+      if (w < targetWidth) {
+        w = targetWidth;
+      }
+      h = h / 2;
+      if (h < targetHeight) {
+        h = targetHeight;
+      }
+      final BufferedImage tmp =
+          new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+      final Graphics2D g2d = tmp.createGraphics();
+      g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+          RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+      g2d.drawImage(toScale, tmp.getHeight(), 0, -1 * tmp.getWidth(),
+          tmp.getHeight(), null);
+      g2d.dispose();
+      toScale = tmp;
+    } while ((w != targetWidth) || (h != targetHeight));
+
+    return toScale;
+  }
 }
