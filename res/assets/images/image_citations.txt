@@ -9,3 +9,11 @@ characters
 
 fumiko.png
 https://opengameart.org/content/fumiko-complete-charset
+
+other
+
+scrollHud.png
+https://pixabay.com/en/scroll-roll-papyrus-paper-34606/
+
+heart.png
+http://www.pd4pic.com/images/outline-recreation-cartoon-heart-signs-symbols.png
