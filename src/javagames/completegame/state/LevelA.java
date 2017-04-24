@@ -4,12 +4,14 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
 import collision.ColliderManager;
+import javagames.completegame.admin.Hud;
 import javagames.util.Camera;
 import javagames.util.KeyboardInput;
 import javagames.util.Matrix3x3f;
 import javagames.util.Vector2f;
 import sprite.CollidableSprite;
 import sprite.Sorceress;
+import sprite.Sprite;
 
 public class LevelA extends State {
   private Camera           camera;
@@ -18,8 +20,13 @@ public class LevelA extends State {
   private Sorceress        hero;
   private KeyboardInput    keys;
   private boolean          drawBounds;
+  private Hud              hud;
+  private Sprite           hudDisplay;
+  private Sprite           heart;
+  private final GameState  state;
 
   public LevelA(final GameState state) {
+    this.state = state;
   }
 
   @Override
@@ -28,6 +35,10 @@ public class LevelA extends State {
     background = (CollidableSprite) controller.getAttribute("levelA");
     hero = (Sorceress) controller.getAttribute("hero");
     camera = new Camera(hero.getCenterPosition());
+
+    hudDisplay = (Sprite) controller.getAttribute("hudDisplay");
+    heart = (Sprite) controller.getAttribute("heart");
+    hud = new Hud(hudDisplay, heart);
 
     // The default is to not draw the collider bounds
     drawBounds = false;
@@ -90,6 +101,7 @@ public class LevelA extends State {
     }
 
     camera.update(new Vector2f(hero.getCenterPosition().x, 0));
+    hud.update(delta);
     checkForLevelWon();
   }
 
@@ -115,9 +127,8 @@ public class LevelA extends State {
     // end of camera
     g.translate(-cameraPosInScreenCoords.x, -cameraPosInScreenCoords.y);
 
-    /*
-     * update hud here acme.drawLives(g, view, state.getLives());
-     * acme.drawScore(g, state.getScore());
-     */
+    g.translate(0, 0);
+    // update Hud display
+    hud.drawHud(g, view, state.getHearts());
   }
 }

@@ -73,7 +73,7 @@ public class Sprite implements Drawable {
     return centerPosition;
   }
 
-  protected void setCenterPosition(final Vector2f centerPosition) {
+  public void setCenterPosition(final Vector2f centerPosition) {
     this.centerPosition = centerPosition;
   }
 

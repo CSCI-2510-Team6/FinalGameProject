@@ -25,6 +25,7 @@ import javagames.util.Utility;
 import javagames.util.Vector2f;
 import sprite.CollidableSprite;
 import sprite.Sorceress;
+import sprite.Sprite;
 
 /**
  * This class handles the initial loading of game assets into memory.
@@ -95,6 +96,31 @@ public class LoadGame extends State {
           image, heroCollider);
 
       controller.setAttribute("hero", hero);
+      return Boolean.TRUE;
+    });
+
+    loadTasks.add(() -> {
+      final InputStream stream = ResourceLoader.load(LoadGame.class,
+          "res/assets/images/other/scrollHud.png",
+          "/images/other/scrollHud.png");
+      final BufferedImage image = ImageIO.read(stream);
+
+      // Create the hud sprite
+      final Sprite hudDisplay = new Sprite(0, 3.8f, 1280, 120, image);
+
+      controller.setAttribute("hudDisplay", hudDisplay);
+      return Boolean.TRUE;
+    });
+
+    loadTasks.add(() -> {
+      final InputStream stream = ResourceLoader.load(LoadGame.class,
+          "res/assets/images/other/heart.png", "/images/other/heart.png");
+      final BufferedImage image = ImageIO.read(stream);
+
+      // Create the heart sprite
+      final Sprite heart = new Sprite(0, 0, 80, 80, image);
+
+      controller.setAttribute("heart", heart);
       return Boolean.TRUE;
     });
 
