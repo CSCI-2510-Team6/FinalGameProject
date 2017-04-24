@@ -37,7 +37,7 @@ public class TitleScreen extends State {
     if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
       final GameState state = new GameState();
       state.setLevel(1);
-      state.setLives(2);
+      state.setHearts(3);
       getController().setState(new LevelStarting(state));
     }
   }

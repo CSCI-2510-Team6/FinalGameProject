@@ -2,7 +2,7 @@ package javagames.completegame.state;
 
 public class GameState {
   private int level;
-  private int lives;
+  private int hearts;
 
   public void setLevel(final int level) {
     this.level = level;
@@ -12,11 +12,11 @@ public class GameState {
     return level;
   }
 
-  public void setLives(final int lives) {
-    this.lives = lives;
+  public void setHearts(final int hearts) {
+    this.hearts = hearts;
   }
 
-  public int getLives() {
-    return lives;
+  public int getHearts() {
+    return hearts;
   }
 }
