@@ -63,7 +63,7 @@ public class Sorceress extends CollidableSprite {
 	 * This method provides a left velocity of 2 units/second.
 	 */
 	public void moveLeft() {
-		setVelocity(new Vector2f(-2, getVelocity().y));
+		setVelocity(new Vector2f(-3, getVelocity().y));
 		facingRight = false;
 		// Handle possible transitions of state
 		switch (action) {
@@ -87,7 +87,7 @@ public class Sorceress extends CollidableSprite {
 	 * This method provides a right velocity of 2 units/second.
 	 */
 	public void moveRight() {
-		setVelocity(new Vector2f(2, getVelocity().y));
+		setVelocity(new Vector2f(3, getVelocity().y));
 		facingRight = true;
 		// Handle possible transitions of state
 		switch (action) {

@@ -112,6 +112,12 @@ public class LevelA extends State {
 				evilKnight.getCollider(), background.getCollider())) != 0) {
 			evilKnight.uncollide(collisionDirection);
 		}
+		// Handle interaction between the hero and enemy
+		if (colliderManager.checkCollidersForInnerIntersection(hero.getCollider(),
+				evilKnight.getCollider())) {
+			hero.handleInjury();
+			state.setHearts(state.getHearts() - 1);
+		}
 		updateShots(delta);
 		camera.update(new Vector2f(hero.getCenterPosition().x, 0));
 		hud.update(delta);
@@ -164,6 +170,12 @@ public class LevelA extends State {
 	 */
 	public void updateShot(final float delta, final CollidableSprite shot) {
 		shot.updateWorld(delta);
+		// See if enemy was hit by shot
+		if (colliderManager.checkCollidersForInnerIntersection(shot.getCollider(),
+				evilKnight.getCollider())) {
+			evilKnight.handleInjury();
+			shots.remove(shot);
+		}
 		// See if shot left stage
 		if (!colliderManager.checkCollidersForOuterIntersection(shot.getCollider(),
 				background.getCollider())) {
