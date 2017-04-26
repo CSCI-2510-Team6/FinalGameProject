@@ -1,1 +1,9 @@
 audio sources
+
+battleThemeA.wav
+https://opengameart.org/content/battle-theme-a
+author: cynicmusic
+
+swish.wav
+https://opengameart.org/content/swishes-sound-pack
+author: artisticdude

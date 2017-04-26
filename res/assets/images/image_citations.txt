@@ -10,6 +10,9 @@ characters
 fumiko.png
 https://opengameart.org/content/fumiko-complete-charset
 
+knightSheet.png
+http://realm667.com/index.php/en/beastiary-mainmenu-136-69621/other-style#preview-6
+
 other
 
 scrollHud.png
@@ -17,3 +20,8 @@ https://pixabay.com/en/scroll-roll-papyrus-paper-34606/
 
 heart.png
 http://www.pd4pic.com/images/outline-recreation-cartoon-heart-signs-symbols.png
+
+airSlash.png
+airSlash2.png
+https://opengameart.org/content/slash-vector
+author: Matheus Carvalho
