@@ -33,6 +33,7 @@ public class LevelA extends State {
 	private final GameState					state;
 	private List<CollidableSprite>	shots;
 	private QuickRestart						daggerSound;
+	private float										invincibilityTime;
 
 	public LevelA(final GameState state) {
 		this.state = state;
@@ -55,6 +56,7 @@ public class LevelA extends State {
 		drawBounds = false;
 		shots = new ArrayList<>();
 		keys = (KeyboardInput) controller.getAttribute("keys");
+		invincibilityTime = 0.0f;
 	}
 
 	@Override
@@ -112,11 +114,15 @@ public class LevelA extends State {
 				evilKnight.getCollider(), background.getCollider())) != 0) {
 			evilKnight.uncollide(collisionDirection);
 		}
+		invincibilityTime += delta;
 		// Handle interaction between the hero and enemy
 		if (colliderManager.checkCollidersForInnerIntersection(hero.getCollider(),
 				evilKnight.getCollider())) {
 			hero.handleInjury();
-			state.setHearts(state.getHearts() - 1);
+			if (invincibilityTime > 1.0f) {
+				state.setHearts(state.getHearts() - 1);
+				invincibilityTime = 0.0f;
+			}
 		}
 		updateShots(delta);
 		camera.update(new Vector2f(hero.getCenterPosition().x, 0));
