@@ -4,8 +4,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import javagames.completegame.admin.GameConstants;
+import javagames.completegame.admin.QuickRestart;
 import javagames.completegame.state.LoadGame;
 import javagames.completegame.state.StateController;
+import javagames.sound.LoopEvent;
 import javagames.util.GameFramework;
 import javagames.util.WindowFramework;
 
@@ -80,6 +82,22 @@ public class CompleteGame extends WindowFramework {
     super.terminate();
 
     // Kill all the music here
+    final LoopEvent loop = (LoopEvent) controller.getAttribute("battleTheme");
+    if (loop != null) {
+      System.out.println("Sound: battleTheme");
+      loop.done();
+      loop.shutDown();
+      System.out.println("Done: battleTheme");
+    }
+
+    final QuickRestart event =
+        (QuickRestart) controller.getAttribute("airSlashSound");
+    if (event != null) {
+      System.out.println("Sound: airSlashSound");
+      event.close();
+      event.shutDown();
+      System.out.println("Done: airSlashSound");
+    }
   }
 
   public static void main(final String[] args) {

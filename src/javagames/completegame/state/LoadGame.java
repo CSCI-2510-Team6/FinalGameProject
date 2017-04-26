@@ -5,6 +5,9 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,11 +22,16 @@ import javax.imageio.ImageIO;
 import collision.Collider;
 import collision.shapes.BoundingBox;
 import collision.shapes.BoundingShape;
+import javagames.completegame.admin.QuickRestart;
+import javagames.sound.BlockingClip;
+import javagames.sound.BlockingDataLine;
+import javagames.sound.LoopEvent;
 import javagames.util.Matrix3x3f;
 import javagames.util.ResourceLoader;
 import javagames.util.Utility;
 import javagames.util.Vector2f;
 import sprite.CollidableSprite;
+import sprite.EvilKnight;
 import sprite.Sorceress;
 import sprite.Sprite;
 
@@ -84,18 +92,44 @@ public class LoadGame extends State {
 
       // hero inner bounding shape
       final List<BoundingShape> heroInner = new ArrayList<>();
-      final Vector2f heroMaxA = heroCenter.add(new Vector2f(0.4f, 0.8f));
-      final Vector2f heroMinA = heroCenter.sub(new Vector2f(0.4f, 0.8f));
+      final Vector2f heroMaxA = heroCenter.add(new Vector2f(0.3f, 0.8f));
+      final Vector2f heroMinA = heroCenter.sub(new Vector2f(0.3f, 0.8f));
       heroInner.add(new BoundingBox(heroMaxA, heroMinA));
 
       // hero collider object
       final Collider heroCollider =
-          new Collider(heroCenter, 0.8f, 1.6f, heroInner);
+          new Collider(heroCenter, 0.6f, 1.6f, heroInner);
       // Create the hero sprite
       final Sorceress hero = new Sorceress(heroCenter.x, heroCenter.y, 864, 256,
           image, heroCollider);
 
       controller.setAttribute("hero", hero);
+      return Boolean.TRUE;
+    });
+
+    loadTasks.add(() -> {
+      final InputStream stream = ResourceLoader.load(LoadGame.class,
+          "res/assets/images/characters/knightSheet.png",
+          "/images/characters/knightSheet.png");
+      final BufferedImage image = ImageIO.read(stream);
+
+      // Initialize hero
+      final Vector2f enemyCenter = new Vector2f(0, 0);
+
+      // hero inner bounding shape
+      final List<BoundingShape> enemyInner = new ArrayList<>();
+      final Vector2f enemyMaxA = enemyCenter.add(new Vector2f(0.4f, 0.8f));
+      final Vector2f enemyMinA = enemyCenter.sub(new Vector2f(0.4f, 0.8f));
+      enemyInner.add(new BoundingBox(enemyMaxA, enemyMinA));
+
+      // enemy collider object
+      final Collider enemyCollider =
+          new Collider(enemyCenter, 0.8f, 1.6f, enemyInner);
+      // Create the enemy sprite
+      final EvilKnight enemy = new EvilKnight(enemyCenter.x, enemyCenter.y, 680,
+          440, image, enemyCollider);
+
+      controller.setAttribute("evilKnight", enemy);
       return Boolean.TRUE;
     });
 
@@ -124,6 +158,39 @@ public class LoadGame extends State {
       return Boolean.TRUE;
     });
 
+    loadTasks.add(() -> {
+      final InputStream stream = ResourceLoader.load(LoadGame.class,
+          "res/assets/images/other/airSlash2.png",
+          "/images/other/airSlash2.png");
+      final BufferedImage image = ImageIO.read(stream);
+
+      controller.setAttribute("airSlashImage", image);
+      return Boolean.TRUE;
+    });
+
+    loadTasks.add(() -> {
+      final byte[] soundBytes = loadSound("battleThemeA.wav");
+      // Java 7.0
+      final LoopEvent loopEvent = new LoopEvent(new BlockingClip(soundBytes));
+      // Java 6.0
+      // LoopEvent loopEvent = new LoopEvent(
+      // new BlockingDataLine(
+      // soundBytes ) );
+      loopEvent.initialize();
+      controller.setAttribute("battleTheme", loopEvent);
+      return Boolean.TRUE;
+    });
+
+    loadTasks.add(() -> {
+      final byte[] soundBytes = loadSound("swish.wav");
+      final QuickRestart restartClip =
+          new QuickRestart(new BlockingDataLine(soundBytes));
+      restartClip.initialize();
+      restartClip.open();
+      controller.setAttribute("airSlashSound", restartClip);
+      return Boolean.TRUE;
+    });
+
     loadResults = new ArrayList<>();
     for (final Callable<Boolean> task : loadTasks) {
       loadResults.add(threadPool.submit(task));
@@ -132,6 +199,29 @@ public class LoadGame extends State {
     numberOfTasks = loadResults.size();
     if (numberOfTasks == 0) {
       numberOfTasks = 1;
+    }
+  }
+
+  private byte[] loadSound(final String path) {
+    final InputStream in = ResourceLoader.load(LoadGame.class,
+        "res/assets/sound/" + path, "/sound/" + path);
+    return readBytes(in);
+  }
+
+  private byte[] readBytes(final InputStream in) {
+    try {
+      final BufferedInputStream buf = new BufferedInputStream(in);
+      final ByteArrayOutputStream out = new ByteArrayOutputStream();
+      int read;
+      while ((read = buf.read()) != -1) {
+        out.write(read);
+      }
+      in.close();
+      return out.toByteArray();
+    }
+    catch (final IOException ex) {
+      ex.printStackTrace();
+      return null;
     }
   }
 
@@ -163,6 +253,8 @@ public class LoadGame extends State {
     }
 
     if ((wait > 1.0f) && threadPool.isShutdown()) {
+      final LoopEvent loop = (LoopEvent) controller.getAttribute("battleTheme");
+      loop.fire();
       // Transition state to the title screen
       getController().setState(new TitleScreen());
     }
