@@ -46,6 +46,7 @@ public class Sorceress extends CollidableSprite {
 	private boolean								jumpButtonHeld;
 	private final boolean					jumpDisabled;
 	private BufferedImage					airSlashImage;
+	private BufferedImage					airSlashImageMirror;
 
 	public Sorceress(final float xPos, final float yPos, final int width,
 			final int height, final BufferedImage image, final Collider col) {
@@ -237,7 +238,7 @@ public class Sorceress extends CollidableSprite {
 		inner.add(new BoundingCircle(0.1f, shotPos));
 		final Collider shotCollider = new Collider(shotPos, 0.1f, inner);
 		final BufferedImage image = (shotDirection > 0) ? airSlashImage
-				: Utility.mirrorScaleImage(airSlashImage, 60, 60);
+				: airSlashImageMirror;
 		// Create shot collidable sprite
 		final CollidableSprite shot = new CollidableSprite((int) shotPos.x,
 				(int) shotPos.y, 60, 60, image, shotCollider);
@@ -545,5 +546,7 @@ public class Sorceress extends CollidableSprite {
 
 	public void setAirSlashImage(final BufferedImage image) {
 		airSlashImage = image;
+		airSlashImageMirror = Utility.mirrorScaleImage(image, image.getWidth(),
+				image.getHeight());
 	}
 }
