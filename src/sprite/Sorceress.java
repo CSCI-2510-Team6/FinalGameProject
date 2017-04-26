@@ -7,6 +7,7 @@ import java.util.List;
 
 import collision.Collider;
 import collision.shapes.BoundingBox;
+import collision.shapes.BoundingCircle;
 import collision.shapes.BoundingShape;
 import javagames.util.Matrix3x3f;
 import javagames.util.Utility;
@@ -15,7 +16,7 @@ import javagames.util.Vector2f;
 public class Sorceress extends CollidableSprite {
 
   private enum Action {
-    STAND, MOVE, JUMP, MELEE
+    STAND, MOVE, JUMP, MELEE, HURT
   }
 
   public static final float GRAVITY = 10.0f;
@@ -40,6 +41,9 @@ public class Sorceress extends CollidableSprite {
   private final BufferedImage[] meleeRight = new BufferedImage[5];
   private int                   meleeRightIndex;
 
+  private final BufferedImage[] hurt = new BufferedImage[1];
+  private int                   hurtIndex;
+
   private float         animationTime;
   private float         jumpTime;
   private Action        action;
@@ -47,6 +51,7 @@ public class Sorceress extends CollidableSprite {
   private boolean       facingRight;
   private boolean       jumpButtonHeld;
   private final boolean jumpDisabled;
+  private BufferedImage airSlashImage;
 
   public Sorceress(final float xPos, final float yPos, final int width,
       final int height, final BufferedImage image, final Collider col) {
@@ -209,19 +214,57 @@ public class Sorceress extends CollidableSprite {
   /**
    * This method changes state to attack
    */
-  public void melee() {
+  public CollidableSprite melee() {
     switch (action) {
       case STAND:
-        action = Action.MELEE;
-        resetState();
-        break;
-      case MOVE:
         action = Action.MELEE;
         resetState();
         break;
       default:
         break;
     }
+
+    // Determine shot position and direction facing for shot velocity
+    Vector2f shotPos = new Vector2f();
+    int shotDirection = 1;
+
+    if ((action == Action.MELEE)) {
+      if (facingRight) {
+        shotPos = getCenterPosition().add(new Vector2f(0.5f, 0.0f));
+        shotDirection = 1;
+      }
+      else {
+        shotPos = getCenterPosition().add(new Vector2f(-0.5f, 0.0f));
+        shotDirection = -1;
+      }
+    }
+
+    // Create inner bounding shape for shot and collider
+    final List<BoundingShape> inner = new ArrayList<>();
+    inner.add(new BoundingCircle(0.1f, shotPos));
+    final Collider shotCollider = new Collider(shotPos, 0.1f, inner);
+
+    final BufferedImage image = (shotDirection > 0) ? airSlashImage
+        : Utility.mirrorScaleImage(airSlashImage, 60, 60);
+
+    // Create shot collidable sprite
+    final CollidableSprite shot = new CollidableSprite((int) shotPos.x,
+        (int) shotPos.y, 60, 60, image, shotCollider);
+
+    // Set Velocity direction of shot
+    if (shotDirection == 1) {
+      shot.setVelocity(new Vector2f(10, 0));
+    }
+    else {
+      shot.setVelocity(new Vector2f(-10, 0));
+    }
+
+    return shot;
+  }
+
+  public void handleInjury() {
+    action = Action.HURT;
+    resetState();
   }
 
   /**
@@ -339,6 +382,21 @@ public class Sorceress extends CollidableSprite {
             resetState();
           }
         }
+      case HURT:
+        hurtIndex = 0;
+
+        if (animationTime > 0.25f) {
+          if (inAir) {
+            action = Action.JUMP;
+          }
+          else {
+            action = Action.STAND;
+          }
+
+          resetState();
+        }
+
+        break;
       default:
         break;
     }
@@ -350,19 +408,19 @@ public class Sorceress extends CollidableSprite {
     if ((action == Action.JUMP)) {
       final Vector2f shiftedCenter =
           getCenterPosition().add(new Vector2f(0, 0f));
-      final Vector2f maxA = shiftedCenter.add(new Vector2f(0.6f, 0.8f));
-      final Vector2f minA = shiftedCenter.sub(new Vector2f(0.6f, 0.8f));
+      final Vector2f maxA = shiftedCenter.add(new Vector2f(0.4f, 0.8f));
+      final Vector2f minA = shiftedCenter.sub(new Vector2f(0.4f, 0.8f));
       inner.add(new BoundingBox(maxA, minA));
 
-      setCollider(new Collider(shiftedCenter, 1.2f, 1.6f, inner));
+      setCollider(new Collider(shiftedCenter, 0.8f, 1.6f, inner));
     }
     // The grounded collider bounds are smaller
     else {
-      final Vector2f maxA = getCenterPosition().add(new Vector2f(0.6f, 0.8f));
-      final Vector2f minA = getCenterPosition().sub(new Vector2f(0.6f, 0.8f));
+      final Vector2f maxA = getCenterPosition().add(new Vector2f(0.3f, 0.8f));
+      final Vector2f minA = getCenterPosition().sub(new Vector2f(0.3f, 0.8f));
       inner.add(new BoundingBox(maxA, minA));
 
-      setCollider(new Collider(getCenterPosition(), 1.2f, 1.6f, inner));
+      setCollider(new Collider(getCenterPosition(), 0.6f, 1.6f, inner));
     }
   }
 
@@ -413,6 +471,10 @@ public class Sorceress extends CollidableSprite {
         else {
           g.drawImage(meleeRight[meleeRightIndex], topLeftX, topLeftY, null);
         }
+        break;
+      case HURT:
+        g.drawImage(hurt[hurtIndex], topLeftX, topLeftY, null);
+        break;
       default:
         break;
     }
@@ -512,6 +574,14 @@ public class Sorceress extends CollidableSprite {
     meleeRight[4] = Utility.scaleImage(
         getImage().getSubimage(width * 4, height * 5, width, height),
         desiredWidth, desiredHeight);
+
+    hurt[0] = Utility.scaleImage(
+        getImage().getSubimage(width * 8, height * 6, width, height),
+        desiredWidth, desiredHeight);
+  }
+
+  public void setAirSlashImage(final BufferedImage image) {
+    airSlashImage = image;
   }
 
 }
