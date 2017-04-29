@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 
+import javagames.util.Dialogue;
 import javagames.util.KeyboardInput;
 import javagames.util.Matrix3x3f;
 import javagames.util.Utility;
@@ -20,6 +21,19 @@ import javagames.util.Utility;
 public class TitleScreen extends State {
 
   protected KeyboardInput keys;
+  protected Dialogue dialog = new Dialogue();
+  int index = 0;
+  private String[] text = new String[23];
+  private String[] msg = { "GAME TITLE", "", "", "", "PRESS SPACE TO PLAY", "",
+  "PRESS ESC TO EXIT" };
+  
+  public TitleScreen()
+  {
+	  for(int x = 0; x < text.length; x++)
+	  {
+		  text[x] = "";
+	  }
+  }
 
   @Override
   public void enter() {
@@ -34,7 +48,20 @@ public class TitleScreen extends State {
   public void processInput(final float delta) {
     super.processInput(delta);
 
-    if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
+    if(keys.keyDownOnce(KeyEvent.VK_SPACE))
+    {
+    	if(index < text.length)
+    	{
+	    	msg = null;
+	    	text[index] = dialog.LevelOneDialogue();
+	    	index++;
+    	}
+    	else
+    	{
+    		text = null;
+    	}
+    }
+    if (keys.keyDownOnce(KeyEvent.VK_SPACE) && text == null) {
       final GameState state = new GameState();
       state.setLevel(1);
       state.setHearts(3);
@@ -55,9 +82,14 @@ public class TitleScreen extends State {
     g.setFont(new Font("Arial", Font.PLAIN, 20));
     g.setColor(Color.ORANGE);
 
-    final String[] msg = { "GAME TITLE", "", "", "", "PRESS SPACE TO PLAY", "",
-        "PRESS ESC TO EXIT" };
 
-    Utility.drawCenteredString(g, width, height / 3, msg);
+    if(msg != null)
+    {
+        Utility.drawCenteredString(g, width, height / 3, msg);    	
+    }
+    if(text[0] != null)
+    {
+    	Utility.drawString(g, 10, 10, text);
+    }	
   }
 }
