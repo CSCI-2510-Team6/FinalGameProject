@@ -12,6 +12,8 @@ package javagames.util;
 public class Dialogue
 {
     public String dialogLevel1[] = new String[23];
+    public String dialogLevel2a[] = new String[4];
+    public String dialogLevel2b[] = new String[8];
     private int dialogIndex = 0;
     
     public Dialogue()
@@ -39,6 +41,20 @@ public class Dialogue
     	dialogLevel1[20] = "Narrator: \"Wait are you sure you do not want to hear the story?\"\n";
     	dialogLevel1[21] = "Keith: \"Nope see ya!\"\n";
     	dialogLevel1[22] = "Narrator: \"I worked really hard on this story, there was a whole lecture on the history of everything and-\"";
+    	
+    	dialogLevel2a[0] = "Narrator: \"Now this enemy here is calle-\"";
+    	dialogLevel2a[1] = "Keith: \"I don't need you to explain I just need to kill it.\"";
+    	dialogLevel2a[2] = "Narrator: \"but this creatu-\"";
+    	dialogLevel2a[3] = "Keith: \"don't care leave me alone.\"";
+
+    	dialogLevel2b[0] = "Keith: \"hello\"";
+    	dialogLevel2b[1] = "Prince: \"thanks for saving me\"";
+    	dialogLevel2b[2] = "Keith: \"no problem can you walk away from that window though I feel like-\"";
+    	dialogLevel2b[3] = "Keith: \"someone is going to grab you through the window… god damn it..\"";
+    	dialogLevel2b[4] = "Narrator: \"Keith, you must go-\"";
+    	dialogLevel2b[5] = "Keith: \"yeah, yeah save the princess, I know damn it. It has been 3 days, can I sleep now?\"";
+    	dialogLevel2b[6] = "Narrator: \"of course not, you’re the hero in this story.\"";
+    	dialogLevel2b[7] = "Keith: \"this is ridiculous.\"";
     }
     
     public String LevelOneDialogue()
@@ -47,6 +63,34 @@ public class Dialogue
     	{
     		dialogIndex++;
     		return dialogLevel1[dialogIndex-1];
+    	}
+    	else
+    	{
+    		dialogIndex = 0;
+    		return null;
+    	}
+    }
+    
+    public String LevelTwoADialogue()
+    {
+    	if(dialogIndex < dialogLevel2a.length)
+    	{
+    		dialogIndex++;
+    		return dialogLevel2a[dialogIndex-1];
+    	}
+    	else
+    	{
+    		dialogIndex = 0;
+    		return null;
+    	}
+    }
+    
+    public String LevelTwoBDialogue()
+    {
+    	if(dialogIndex < dialogLevel2b.length)
+    	{
+    		dialogIndex++;
+    		return dialogLevel2b[dialogIndex-1];
     	}
     	else
     	{
