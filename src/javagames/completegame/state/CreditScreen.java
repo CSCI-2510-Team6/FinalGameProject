@@ -22,9 +22,10 @@ public class CreditScreen extends State {
   private KeyboardInput keys;
 
   // Text for the credits
-  private static final String[] creditInfo = { "GAME TITLE - version 1.0",
-      "Programmed by: Kristopher Davlin, Paul Growney, Tyler Veseth, Andres Ward",
-      "Special thanks to:", "Timothy Wright", };
+  private static final String[] creditInfo =
+      { "Wonder Keith and No Brothers - version 1.0",
+          "Programmed by: Kristopher Davlin, Paul Growney, Tyler Veseth, Andres Ward",
+          "Special thanks to:", "Timothy Wright", };
 
   @Override
   public void enter() {
