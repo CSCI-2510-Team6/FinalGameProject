@@ -5,6 +5,15 @@ backgrounds
 iceCastle.jpeg
 http://www.desktop-image.com/game/2d-game-backgrounds-5/
 
+Forest1.png
+needs citation
+
+Forest2.png
+needs citation
+
+CastleLevel.png
+needs citation
+
 characters
 
 fumiko.png
@@ -12,6 +21,9 @@ https://opengameart.org/content/fumiko-complete-charset
 
 knightSheet.png
 http://realm667.com/index.php/en/beastiary-mainmenu-136-69621/other-style#preview-6
+
+Knight Sprites.png
+needs citation
 
 other
 
