@@ -152,6 +152,144 @@ public class LoadGame extends State {
 
     loadTasks.add(() -> {
       final InputStream stream = ResourceLoader.load(LoadGame.class,
+          "res/assets/images/backgrounds/Forest2.png",
+          "/images/backgrounds/Forest2.png");
+      final BufferedImage image = ImageIO.read(stream);
+
+      // Initialize levelA background
+      final List<BoundingShape> backInner = new ArrayList<>();
+
+      // background inner bounding shapes
+      final BoundingBox leftBound =
+          new BoundingBox(new Vector2f(-49.5f, 0.5f), new Vector2f(-50, -3f));
+      backInner.add(leftBound);
+
+      final BoundingBox firstStep =
+          new BoundingBox(new Vector2f(-18f, -1.4f), new Vector2f(-27.6f, -3f));
+      backInner.add(firstStep);
+
+      final BoundingBox secondStep = new BoundingBox(new Vector2f(-18f, 0.2f),
+          new Vector2f(-22.7f, -1.4f));
+      backInner.add(secondStep);
+
+      final BoundingBox thirdStep =
+          new BoundingBox(new Vector2f(-2f, -1.4f), new Vector2f(-10f, -3f));
+      backInner.add(thirdStep);
+
+      final BoundingBox leftBottom =
+          new BoundingBox(new Vector2f(-2, -3f), new Vector2f(-50, -4.5f));
+      backInner.add(leftBottom);
+
+      final BoundingBox platform1 =
+          new BoundingBox(new Vector2f(4.3f, 0.4f), new Vector2f(-0.5f, 0.2f));
+      backInner.add(platform1);
+
+      final BoundingBox platform2 =
+          new BoundingBox(new Vector2f(7.3f, -1.8f), new Vector2f(4.0f, -2f));
+      backInner.add(platform2);
+
+      final BoundingBox platform3 = new BoundingBox(new Vector2f(12.5f, -0.6f),
+          new Vector2f(9.3f, -0.8f));
+      backInner.add(platform3);
+
+      final BoundingBox platform4 =
+          new BoundingBox(new Vector2f(17.6f, 1.5f), new Vector2f(14.4f, 1.3f));
+      backInner.add(platform4);
+
+      final BoundingBox fourthStep =
+          new BoundingBox(new Vector2f(27.2f, 0.2f), new Vector2f(20.9f, 0.0f));
+      backInner.add(fourthStep);
+
+      final BoundingBox rightBottom =
+          new BoundingBox(new Vector2f(50f, -3f), new Vector2f(32.1f, -4.5f));
+      backInner.add(rightBottom);
+
+      final BoundingBox rightBound =
+          new BoundingBox(new Vector2f(50f, 3.5f), new Vector2f(49.7f, -3f));
+      backInner.add(rightBound);
+
+      // background collider object
+      final Collider backgroundCollider =
+          new Collider(new Vector2f(0, 0), 100.0f, 9.0f, backInner);
+      // Create the background collidable sprite
+      final CollidableSprite background =
+          new CollidableSprite(0, 0, 8120, 720, image, backgroundCollider);
+
+      controller.setAttribute("level2", background);
+      return Boolean.TRUE;
+    });
+
+    loadTasks.add(() -> {
+      final InputStream stream = ResourceLoader.load(LoadGame.class,
+          "res/assets/images/backgrounds/CastleLevel.png",
+          "/images/backgrounds/CastleLevel.png");
+      final BufferedImage image = ImageIO.read(stream);
+
+      // Initialize levelA background
+      final List<BoundingShape> backInner = new ArrayList<>();
+
+      // background inner bounding shapes
+      final BoundingBox leftBound =
+          new BoundingBox(new Vector2f(-49.5f, 0.5f), new Vector2f(-50, -3f));
+      backInner.add(leftBound);
+
+      final BoundingBox firstStep =
+          new BoundingBox(new Vector2f(-18f, -1.4f), new Vector2f(-27.6f, -3f));
+      backInner.add(firstStep);
+
+      final BoundingBox secondStep = new BoundingBox(new Vector2f(-18f, 0.2f),
+          new Vector2f(-22.7f, -1.4f));
+      backInner.add(secondStep);
+
+      final BoundingBox thirdStep =
+          new BoundingBox(new Vector2f(-2f, -1.4f), new Vector2f(-10f, -3f));
+      backInner.add(thirdStep);
+
+      final BoundingBox leftBottom =
+          new BoundingBox(new Vector2f(-2, -3f), new Vector2f(-50, -4.5f));
+      backInner.add(leftBottom);
+
+      final BoundingBox platform1 =
+          new BoundingBox(new Vector2f(4.3f, 0.4f), new Vector2f(-0.5f, 0.2f));
+      backInner.add(platform1);
+
+      final BoundingBox platform2 =
+          new BoundingBox(new Vector2f(7.3f, -1.8f), new Vector2f(4.0f, -2f));
+      backInner.add(platform2);
+
+      final BoundingBox platform3 = new BoundingBox(new Vector2f(12.5f, -0.6f),
+          new Vector2f(9.3f, -0.8f));
+      backInner.add(platform3);
+
+      final BoundingBox platform4 =
+          new BoundingBox(new Vector2f(17.6f, 1.5f), new Vector2f(14.4f, 1.3f));
+      backInner.add(platform4);
+
+      final BoundingBox fourthStep =
+          new BoundingBox(new Vector2f(27.2f, 0.2f), new Vector2f(20.9f, 0.0f));
+      backInner.add(fourthStep);
+
+      final BoundingBox rightBottom =
+          new BoundingBox(new Vector2f(50f, -3f), new Vector2f(32.1f, -4.5f));
+      backInner.add(rightBottom);
+
+      final BoundingBox rightBound =
+          new BoundingBox(new Vector2f(50f, 3.5f), new Vector2f(49.7f, -3f));
+      backInner.add(rightBound);
+
+      // background collider object
+      final Collider backgroundCollider =
+          new Collider(new Vector2f(0, 0), 100.0f, 9.0f, backInner);
+      // Create the background collidable sprite
+      final CollidableSprite background =
+          new CollidableSprite(0, 0, 5120, 720, image, backgroundCollider);
+
+      controller.setAttribute("level3", background);
+      return Boolean.TRUE;
+    });
+
+    loadTasks.add(() -> {
+      final InputStream stream = ResourceLoader.load(LoadGame.class,
           "res/assets/images/characters/fumiko.png",
           "/images/characters/fumiko.png");
       final BufferedImage image = ImageIO.read(stream);
