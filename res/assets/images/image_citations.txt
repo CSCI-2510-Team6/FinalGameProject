@@ -6,13 +6,13 @@ iceCastle.jpeg
 http://www.desktop-image.com/game/2d-game-backgrounds-5/
 
 Forest1.png
-needs citation
+http://www.gameart2d.com/free-platformer-game-tileset.html
 
 Forest2.png
-needs citation
+http://www.gameart2d.com/free-platformer-game-tileset.html
 
 CastleLevel.png
-needs citation
+https://opengameart.org/content/spooky-castle-tileset
 
 characters
 
@@ -23,7 +23,7 @@ knightSheet.png
 http://realm667.com/index.php/en/beastiary-mainmenu-136-69621/other-style#preview-6
 
 Knight Sprites.png
-needs citation
+https://opengameart.org/content/knight-and-knight-animation
 
 other
 
