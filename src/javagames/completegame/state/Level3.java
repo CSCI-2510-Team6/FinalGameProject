@@ -43,7 +43,7 @@ public class Level3 extends State {
     hero = (Sorceress) controller.getAttribute("hero");
     hero.setAirSlashImage(
         (BufferedImage) controller.getAttribute("airSlashImage"));
-    hero.setCenterPosition(new Vector2f(-45, 0));
+    hero.setCenterPosition(new Vector2f(-25, 0));
 
     daggerSound = (QuickRestart) controller.getAttribute("airSlashSound");
     camera = new Camera(hero.getCenterPosition());
@@ -118,7 +118,7 @@ public class Level3 extends State {
   }
 
   private void checkForLevelWon() {
-    if (hero.getCenterPosition().x > 45) {
+    if (hero.getCenterPosition().x > 25) {
       state.setLevel(state.getLevel() + 1);
       getController().setState(new CreditScreen());
     }
@@ -126,7 +126,7 @@ public class Level3 extends State {
 
   private void checkForOutOfBounds() {
     if (hero.getCenterPosition().y < -5.5f) {
-      hero.setCenterPosition(new Vector2f(-45f, 0f));
+      hero.setCenterPosition(new Vector2f(-25f, 0f));
     }
   }
 
