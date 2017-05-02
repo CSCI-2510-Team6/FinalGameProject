@@ -160,57 +160,57 @@ public class LoadGame extends State {
       final List<BoundingShape> backInner = new ArrayList<>();
 
       // background inner bounding shapes
-      final BoundingBox leftBound =
-          new BoundingBox(new Vector2f(-49.5f, 0.5f), new Vector2f(-50, -3f));
+      final BoundingBox leftBound = new BoundingBox(new Vector2f(-49.15f, 1.9f),
+          new Vector2f(-50.75f, -3f));
       backInner.add(leftBound);
 
-      final BoundingBox firstStep =
-          new BoundingBox(new Vector2f(-18f, -1.4f), new Vector2f(-27.6f, -3f));
-      backInner.add(firstStep);
-
-      final BoundingBox secondStep = new BoundingBox(new Vector2f(-18f, 0.2f),
-          new Vector2f(-22.7f, -1.4f));
-      backInner.add(secondStep);
-
-      final BoundingBox thirdStep =
-          new BoundingBox(new Vector2f(-2f, -1.4f), new Vector2f(-10f, -3f));
-      backInner.add(thirdStep);
-
-      final BoundingBox leftBottom =
-          new BoundingBox(new Vector2f(-2, -3f), new Vector2f(-50, -4.5f));
+      final BoundingBox leftBottom = new BoundingBox(new Vector2f(5.25f, -3f),
+          new Vector2f(-50.75f, -4.5f));
       backInner.add(leftBottom);
 
+      final BoundingBox firstStep = new BoundingBox(
+          new Vector2f(-17.25f, -1.4f), new Vector2f(-31.6f, -3f));
+      backInner.add(firstStep);
+
+      final BoundingBox secondStep = new BoundingBox(
+          new Vector2f(-17.25f, 0.2f), new Vector2f(-28.35f, -1.4f));
+      backInner.add(secondStep);
+
       final BoundingBox platform1 =
-          new BoundingBox(new Vector2f(4.3f, 0.4f), new Vector2f(-0.5f, 0.2f));
+          new BoundingBox(new Vector2f(-2.75f, 0.2f), new Vector2f(-14f, 0.0f));
       backInner.add(platform1);
 
-      final BoundingBox platform2 =
-          new BoundingBox(new Vector2f(7.3f, -1.8f), new Vector2f(4.0f, -2f));
+      final BoundingBox middleBottom =
+          new BoundingBox(new Vector2f(18f, -3f), new Vector2f(8.5f, -4.5f));
+      backInner.add(middleBottom);
+
+      final BoundingBox platform2 = new BoundingBox(new Vector2f(22.9f, -1.4f),
+          new Vector2f(19.7f, -1.6f));
       backInner.add(platform2);
 
-      final BoundingBox platform3 = new BoundingBox(new Vector2f(12.5f, -0.6f),
-          new Vector2f(9.3f, -0.8f));
+      final BoundingBox platform3 = new BoundingBox(new Vector2f(27.7f, -0.1f),
+          new Vector2f(24.5f, -0.3f));
       backInner.add(platform3);
 
       final BoundingBox platform4 =
-          new BoundingBox(new Vector2f(17.6f, 1.5f), new Vector2f(14.4f, 1.3f));
+          new BoundingBox(new Vector2f(30.7f, -1.8f), new Vector2f(27.6f, -2f));
       backInner.add(platform4);
 
-      final BoundingBox fourthStep =
-          new BoundingBox(new Vector2f(27.2f, 0.2f), new Vector2f(20.9f, 0.0f));
-      backInner.add(fourthStep);
+      final BoundingBox platform5 = new BoundingBox(new Vector2f(35.7f, -1.1f),
+          new Vector2f(32.5f, -1.3f));
+      backInner.add(platform5);
 
-      final BoundingBox rightBottom =
-          new BoundingBox(new Vector2f(50f, -3f), new Vector2f(32.1f, -4.5f));
+      final BoundingBox rightBottom = new BoundingBox(new Vector2f(50.75f, -3f),
+          new Vector2f(35.7f, -4.5f));
       backInner.add(rightBottom);
 
-      final BoundingBox rightBound =
-          new BoundingBox(new Vector2f(50f, 3.5f), new Vector2f(49.7f, -3f));
+      final BoundingBox rightBound = new BoundingBox(new Vector2f(50.75f, 3.5f),
+          new Vector2f(50.05f, -3f));
       backInner.add(rightBound);
 
       // background collider object
       final Collider backgroundCollider =
-          new Collider(new Vector2f(0, 0), 100.0f, 9.0f, backInner);
+          new Collider(new Vector2f(0, 0), 101.5f, 9.0f, backInner);
       // Create the background collidable sprite
       final CollidableSprite background =
           new CollidableSprite(0, 0, 8120, 720, image, backgroundCollider);
@@ -230,56 +230,153 @@ public class LoadGame extends State {
 
       // background inner bounding shapes
       final BoundingBox leftBound =
-          new BoundingBox(new Vector2f(-49.5f, 0.5f), new Vector2f(-50, -3f));
+          new BoundingBox(new Vector2f(-31.3f, 2.5f), new Vector2f(-32, -3f));
       backInner.add(leftBound);
 
-      final BoundingBox firstStep =
-          new BoundingBox(new Vector2f(-18f, -1.4f), new Vector2f(-27.6f, -3f));
-      backInner.add(firstStep);
-
-      final BoundingBox secondStep = new BoundingBox(new Vector2f(-18f, 0.2f),
-          new Vector2f(-22.7f, -1.4f));
-      backInner.add(secondStep);
-
-      final BoundingBox thirdStep =
-          new BoundingBox(new Vector2f(-2f, -1.4f), new Vector2f(-10f, -3f));
-      backInner.add(thirdStep);
-
       final BoundingBox leftBottom =
-          new BoundingBox(new Vector2f(-2, -3f), new Vector2f(-50, -4.5f));
+          new BoundingBox(new Vector2f(-13, -3f), new Vector2f(-32, -4.5f));
       backInner.add(leftBottom);
 
-      final BoundingBox platform1 =
-          new BoundingBox(new Vector2f(4.3f, 0.4f), new Vector2f(-0.5f, 0.2f));
-      backInner.add(platform1);
+      final BoundingBox stair1a = new BoundingBox(new Vector2f(-14.4f, -2.3f),
+          new Vector2f(-14.6f, -2.4f));
+      backInner.add(stair1a);
+      final BoundingBox stair1b = new BoundingBox(new Vector2f(-14.5f, -2.4f),
+          new Vector2f(-14.8f, -2.5f));
+      backInner.add(stair1b);
+      final BoundingBox stair1c = new BoundingBox(new Vector2f(-14.6f, -2.5f),
+          new Vector2f(-15.0f, -2.6f));
+      backInner.add(stair1c);
+      final BoundingBox stair1d = new BoundingBox(new Vector2f(-14.7f, -2.6f),
+          new Vector2f(-15.2f, -2.7f));
+      backInner.add(stair1d);
+      final BoundingBox stair1e = new BoundingBox(new Vector2f(-14.8f, -2.7f),
+          new Vector2f(-15.4f, -2.8f));
+      backInner.add(stair1e);
+      final BoundingBox stair1f = new BoundingBox(new Vector2f(-14.9f, -2.8f),
+          new Vector2f(-15.6f, -2.9f));
+      backInner.add(stair1f);
+      final BoundingBox stair1g =
+          new BoundingBox(new Vector2f(-15f, -2.9f), new Vector2f(-15.8f, -3f));
+      backInner.add(stair1g);
 
-      final BoundingBox platform2 =
-          new BoundingBox(new Vector2f(7.3f, -1.8f), new Vector2f(4.0f, -2f));
-      backInner.add(platform2);
+      final BoundingBox stair4a =
+          new BoundingBox(new Vector2f(-13, -3f), new Vector2f(-32, -4.5f));
+      backInner.add(stair4a);
+      final BoundingBox stair4b =
+          new BoundingBox(new Vector2f(-13, -3f), new Vector2f(-32, -4.5f));
+      backInner.add(stair4b);
+      final BoundingBox stair4c =
+          new BoundingBox(new Vector2f(-13, -3f), new Vector2f(-32, -4.5f));
+      backInner.add(stair4c);
+      final BoundingBox stair4d =
+          new BoundingBox(new Vector2f(-13, -3f), new Vector2f(-32, -4.5f));
+      backInner.add(stair4d);
+      final BoundingBox stair4e =
+          new BoundingBox(new Vector2f(-13, -3f), new Vector2f(-32, -4.5f));
+      backInner.add(stair4e);
+      final BoundingBox stair4f =
+          new BoundingBox(new Vector2f(-13, -3f), new Vector2f(-32, -4.5f));
+      backInner.add(stair4f);
+      final BoundingBox stair4g =
+          new BoundingBox(new Vector2f(-13, -3f), new Vector2f(-32, -4.5f));
+      backInner.add(stair4g);
 
-      final BoundingBox platform3 = new BoundingBox(new Vector2f(12.5f, -0.6f),
-          new Vector2f(9.3f, -0.8f));
-      backInner.add(platform3);
+      final BoundingBox step1 =
+          new BoundingBox(new Vector2f(-13, -2.2f), new Vector2f(-14.4f, -3f));
+      backInner.add(step1);
 
-      final BoundingBox platform4 =
-          new BoundingBox(new Vector2f(17.6f, 1.5f), new Vector2f(14.4f, 1.3f));
-      backInner.add(platform4);
+      final BoundingBox midBottom1 = new BoundingBox(new Vector2f(-6.1f, -3f),
+          new Vector2f(-10.6f, -4.5f));
+      backInner.add(midBottom1);
 
-      final BoundingBox fourthStep =
-          new BoundingBox(new Vector2f(27.2f, 0.2f), new Vector2f(20.9f, 0.0f));
-      backInner.add(fourthStep);
+      final BoundingBox bridge1 =
+          new BoundingBox(new Vector2f(-3.8f, -3f), new Vector2f(-6.1f, -3.2f));
+      backInner.add(bridge1);
+
+      final BoundingBox bridge2 = new BoundingBox(new Vector2f(-9.0f, 0.7f),
+          new Vector2f(-10.65f, 0.5f));
+      backInner.add(bridge2);
+
+      final BoundingBox stair3a =
+          new BoundingBox(new Vector2f(-8.8f, 0.6f), new Vector2f(-9.0f, 0.5f));
+      backInner.add(stair3a);
+      final BoundingBox stair3b =
+          new BoundingBox(new Vector2f(-8.6f, 0.5f), new Vector2f(-8.8f, 0.4f));
+      backInner.add(stair3b);
+      final BoundingBox stair3c =
+          new BoundingBox(new Vector2f(-8.4f, 0.4f), new Vector2f(-8.6f, 0.3f));
+      backInner.add(stair3c);
+      final BoundingBox stair3d =
+          new BoundingBox(new Vector2f(-8.2f, 0.3f), new Vector2f(-8.4f, 0.2f));
+      backInner.add(stair3d);
+      final BoundingBox stair3e =
+          new BoundingBox(new Vector2f(-8.0f, 0.2f), new Vector2f(-8.2f, 0.1f));
+      backInner.add(stair3e);
+      final BoundingBox stair3f =
+          new BoundingBox(new Vector2f(-7.8f, 0.1f), new Vector2f(-8.0f, 0.0f));
+      backInner.add(stair3f);
+
+      final BoundingBox bridge3 =
+          new BoundingBox(new Vector2f(-2.7f, 2.2f), new Vector2f(-6.0f, 2.0f));
+      backInner.add(bridge3);
+
+      final BoundingBox bridge4 =
+          new BoundingBox(new Vector2f(2.6f, 2.2f), new Vector2f(-0.55f, 2.0f));
+      backInner.add(bridge4);
+
+      final BoundingBox bridge5 =
+          new BoundingBox(new Vector2f(-5.1f, 0f), new Vector2f(-7.8f, -0.2f));
+      backInner.add(bridge5);
+
+      final BoundingBox stair2a = new BoundingBox(new Vector2f(-4.9f, -0.1f),
+          new Vector2f(-5.1f, -0.2f));
+      backInner.add(stair2a);
+      final BoundingBox stair2b = new BoundingBox(new Vector2f(-4.7f, -0.2f),
+          new Vector2f(-4.9f, -0.3f));
+      backInner.add(stair2b);
+      final BoundingBox stair2c = new BoundingBox(new Vector2f(-4.5f, -0.3f),
+          new Vector2f(-4.7f, -0.4f));
+      backInner.add(stair2c);
+      final BoundingBox stair2d = new BoundingBox(new Vector2f(-4.3f, -0.4f),
+          new Vector2f(-4.5f, -0.5f));
+      backInner.add(stair2d);
+      final BoundingBox stair2e = new BoundingBox(new Vector2f(-4.1f, -0.5f),
+          new Vector2f(-4.3f, -0.6f));
+      backInner.add(stair2e);
+      final BoundingBox stair2f = new BoundingBox(new Vector2f(-3.9f, -0.6f),
+          new Vector2f(-4.1f, -0.7f));
+      backInner.add(stair2f);
+      final BoundingBox stair2g = new BoundingBox(new Vector2f(-3.7f, -0.7f),
+          new Vector2f(-3.9f, -0.8f));
+      backInner.add(stair2g);
+
+      final BoundingBox midBottom2 = new BoundingBox(
+          new Vector2f(-0.55f, -2.2f), new Vector2f(-2.7f, -4.5f));
+      backInner.add(midBottom2);
+
+      final BoundingBox highBlock = new BoundingBox(new Vector2f(-0.55f, 2.2f),
+          new Vector2f(-2.7f, 0.5f));
+      backInner.add(highBlock);
 
       final BoundingBox rightBottom =
-          new BoundingBox(new Vector2f(50f, -3f), new Vector2f(32.1f, -4.5f));
+          new BoundingBox(new Vector2f(32, -3f), new Vector2f(3.85f, -4.5f));
       backInner.add(rightBottom);
 
+      final BoundingBox step2 = new BoundingBox(new Vector2f(15.3f, -2.3f),
+          new Vector2f(7.7f, -3.0f));
+      backInner.add(step2);
+
+      final BoundingBox step3 = new BoundingBox(new Vector2f(15.3f, -1.5f),
+          new Vector2f(10.7f, -2.3f));
+      backInner.add(step3);
+
       final BoundingBox rightBound =
-          new BoundingBox(new Vector2f(50f, 3.5f), new Vector2f(49.7f, -3f));
+          new BoundingBox(new Vector2f(32f, 1.5f), new Vector2f(31.3f, -3f));
       backInner.add(rightBound);
 
       // background collider object
       final Collider backgroundCollider =
-          new Collider(new Vector2f(0, 0), 100.0f, 9.0f, backInner);
+          new Collider(new Vector2f(0, 0), 64.0f, 9.0f, backInner);
       // Create the background collidable sprite
       final CollidableSprite background =
           new CollidableSprite(0, 0, 5120, 720, image, backgroundCollider);
