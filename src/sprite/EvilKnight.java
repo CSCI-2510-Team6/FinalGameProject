@@ -72,9 +72,13 @@ public class EvilKnight extends CollidableSprite {
    * This method resets the timers and animation array indexes on each state
    * change.
    */
-  private void resetState() {
+  public void resetState() {
     animationTime = 0;
     attackLeftIndex = attackRightIndex = dieLeftIndex = dieRightIndex = 0;
+  }
+
+  public void defaultAction() {
+    action = Action.BLOCK;
   }
 
   @Override

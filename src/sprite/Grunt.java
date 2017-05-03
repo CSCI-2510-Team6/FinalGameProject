@@ -73,10 +73,14 @@ public class Grunt extends CollidableSprite {
    * This method resets the timers and animation array indexes on each state
    * change.
    */
-  private void resetState() {
+  public void resetState() {
     animationTime = 0;
     moveLeftIndex = moveRightIndex =
         attackLeftIndex = attackRightIndex = dieLeftIndex = dieRightIndex = 0;
+  }
+
+  public void defaultAction() {
+    action = Action.STAND;
   }
 
   @Override
