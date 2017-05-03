@@ -32,31 +32,32 @@ public class Level3 extends State {
   private Grunt                  grunt;
   private EvilKnight             evilKnight;
   private KeyboardInput          keys;
-  private boolean                drawBounds, levelOver;
+  private boolean                drawBounds;
   private Hud                    hud;
   private Sprite                 hudDisplay;
   private Sprite                 heart;
   private final GameState        state;
   private List<CollidableSprite> shots;
   private QuickRestart           daggerSound;
-  private boolean				 dialogFlag;
-  private int					 index;
-  private String[]        		 textA   = new String[4];
-  protected Dialogue      dialog = new Dialogue();
+  private float                  invincibilityTime;
+  private final boolean          dialogFlag;
+  private int                    index;
+  private String[]               textA  = new String[4];
+  protected Dialogue             dialog = new Dialogue();
 
   public Level3(final GameState state) {
-	  
+
     this.state = state;
     for (int x = 0; x < textA.length; x++) {
-        textA[x] = "";
-      }
+      textA[x] = "";
+    }
 
-	dialogFlag = levelOver = false;
+    dialogFlag = false;
   }
 
   @Override
   public void enter() {
-	index = 0;
+    index = 0;
     colliderManager = new ColliderManager();
     background = (CollidableSprite) controller.getAttribute("level3");
     hero = (Sorceress) controller.getAttribute("hero");
@@ -90,60 +91,58 @@ public class Level3 extends State {
 
   @Override
   public void processInput(final float delta) {
-	  if(textA == null)
-		{
-    // movement, don't allow both A and D keys to cause action together.
-    if (keys.keyDown(KeyEvent.VK_A) != keys.keyDown(KeyEvent.VK_D)) {
-      // Move Left
-      if (keys.keyDown(KeyEvent.VK_A)) {
-        hero.moveLeft();
+    if (textA == null) {
+      // movement, don't allow both A and D keys to cause action together.
+      if (keys.keyDown(KeyEvent.VK_A) != keys.keyDown(KeyEvent.VK_D)) {
+        // Move Left
+        if (keys.keyDown(KeyEvent.VK_A)) {
+          hero.moveLeft();
+        }
+        // Move Right
+        if (keys.keyDown(KeyEvent.VK_D)) {
+          hero.moveRight();
+        }
       }
-      // Move Right
-      if (keys.keyDown(KeyEvent.VK_D)) {
-        hero.moveRight();
+      else {
+        hero.stopMoving();
+      }
+      // jump
+      if (keys.keyDown(KeyEvent.VK_J) && !hero.isJumpButtonHeld()
+          && !hero.isInAir() && !hero.isJumpDisabled()) {
+        hero.pressJumpButton();
+      }
+      // Handles variable jump based on length of time jump button is pressed
+      if (hero.isJumpButtonHeld()) {
+        hero.jump(delta);
+      }
+      if (!keys.keyDown(KeyEvent.VK_J)) {
+        hero.releaseJumpButton();
+      }
+      if (keys.keyDownOnce(KeyEvent.VK_K) && hero.canAttack()) {
+        shots.add(hero.melee());
+        // Play air slash sound
+        daggerSound.fire();
+      }
+      // Toggle collider rendering
+      if (keys.keyDownOnce(KeyEvent.VK_B)) {
+        drawBounds = !drawBounds;
       }
     }
+
     else {
       hero.stopMoving();
+      if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
+        if (index < textA.length) {
+          textA[index] = dialog.LevelThreeADialogue();
+          index++;
+        }
+        else {
+          textA = null;
+          index = 0;
+          dialog = new Dialogue();
+        }
+      }
     }
-    // jump
-    if (keys.keyDown(KeyEvent.VK_J) && !hero.isJumpButtonHeld()
-        && !hero.isInAir() && !hero.isJumpDisabled()) {
-      hero.pressJumpButton();
-    }
-    // Handles variable jump based on length of time jump button is pressed
-    if (hero.isJumpButtonHeld()) {
-      hero.jump(delta);
-    }
-    if (!keys.keyDown(KeyEvent.VK_J)) {
-      hero.releaseJumpButton();
-    }
-    if (keys.keyDownOnce(KeyEvent.VK_K) && hero.canAttack()) {
-      shots.add(hero.melee());
-      // Play air slash sound
-      daggerSound.fire();
-    }
-    // Toggle collider rendering
-    if (keys.keyDownOnce(KeyEvent.VK_B)) {
-      drawBounds = !drawBounds;
-    }
-		}
-	 
-		else
-		{
-			hero.stopMoving();
-		 if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
-		      if (index < textA.length) {
-		        textA[index] = dialog.LevelThreeADialogue();
-		        index++;
-		      }
-		      else {
-		        textA = null;
-		        index = 0;
-		        dialog = new Dialogue();
-		      }
-		    }
-		}
   }
 
   @Override
@@ -201,9 +200,9 @@ public class Level3 extends State {
   }
 
   private void checkForLevelWon() {
-    if (hero.getCenterPosition().x > 25) {  
-    	state.setLevel(state.getLevel() + 1);
-        getController().setState(new CreditScreen());
+    if (hero.getCenterPosition().x > 25) {
+      state.setLevel(state.getLevel() + 1);
+      getController().setState(new CreditScreen());
     }
   }
 
@@ -223,34 +222,32 @@ public class Level3 extends State {
   @Override
   public void render(final Graphics2D g, final Matrix3x3f view) {
     // begin of camera
-	  
-	if (textA != null) 
-    {
-		g.setFont(new Font("Arial", Font.PLAIN, 20));
-		g.setColor(Color.ORANGE);
+
+    if (textA != null) {
+      g.setFont(new Font("Arial", Font.PLAIN, 20));
+      g.setColor(Color.ORANGE);
 
       Utility.drawString(g, 10, 100, textA);
 
     }
-	else
-	{
-	    final Vector2f cameraPosInScreenCoords = view.mul(camera.getPosition());
-	    g.translate(cameraPosInScreenCoords.x, cameraPosInScreenCoords.y);
-	    background.render(g, view, drawBounds);
-	    for (final CollidableSprite shot : shots) {
-	      shot.render(g, view, drawBounds);
-	    }
-	
-    grunt.render(g, view, drawBounds);
-    evilKnight.render(g, view, drawBounds);
+    else {
+      final Vector2f cameraPosInScreenCoords = view.mul(camera.getPosition());
+      g.translate(cameraPosInScreenCoords.x, cameraPosInScreenCoords.y);
+      background.render(g, view, drawBounds);
+      for (final CollidableSprite shot : shots) {
+        shot.render(g, view, drawBounds);
+      }
 
-	    hero.render(g, view, drawBounds);
-	    // end of camera
-	    g.translate(-cameraPosInScreenCoords.x, -cameraPosInScreenCoords.y);
-	    g.translate(0, 0);
-	    // update Hud display
-	    hud.drawHud(g, view, state.getHearts());
-	}
+      grunt.render(g, view, drawBounds);
+      evilKnight.render(g, view, drawBounds);
+
+      hero.render(g, view, drawBounds);
+      // end of camera
+      g.translate(-cameraPosInScreenCoords.x, -cameraPosInScreenCoords.y);
+      g.translate(0, 0);
+      // update Hud display
+      hud.drawHud(g, view, state.getHearts());
+    }
   }
 
   /**
