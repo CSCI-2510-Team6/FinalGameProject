@@ -2,7 +2,7 @@ package javagames.util;
 
 /**
  * This class stores the dialogue for the game
- * 
+ *
  * @author Kristopher
  */
 public class Dialogue {
@@ -15,7 +15,7 @@ public class Dialogue {
   public Dialogue() {
     dialogLevel1[0] = "Narrator: \"Hello Keith\"\n";
     dialogLevel1[1] = "Keith: \"My name is not Keith. It's Annabe-\"\n";
-    dialogLevel1[2] = "Narrotor: \"Keith use the A and D arrows to move.\"\n";
+    dialogLevel1[2] = "Narrotor: \"Keith use the A and D keys to move.\"\n";
     dialogLevel1[3] =
         "Keith: \"I know how to move. This is not new knowledge to me.\"\n";
     dialogLevel1[4] =
