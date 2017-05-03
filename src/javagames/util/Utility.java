@@ -210,7 +210,7 @@ public class Utility {
     final Graphics2D g2d = image.createGraphics();
     g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
         RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-    g2d.drawImage(toScale, image.getHeight(), 0, -1 * image.getWidth(),
+    g2d.drawImage(toScale, image.getHeight(), 0, -image.getWidth(),
         image.getHeight(), null);
     g2d.dispose();
     return image;
@@ -244,7 +244,7 @@ public class Utility {
       final Graphics2D g2d = tmp.createGraphics();
       g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
           RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-      g2d.drawImage(toScale, tmp.getHeight(), 0, -1 * tmp.getWidth(),
+      g2d.drawImage(toScale, tmp.getHeight(), 0, -tmp.getWidth(),
           tmp.getHeight(), null);
       g2d.dispose();
       toScale = tmp;
