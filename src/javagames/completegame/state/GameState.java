@@ -1,5 +1,11 @@
 package javagames.completegame.state;
 
+/**
+ * This class stores the current level number and number of hearts
+ * 
+ * @author Andres
+ *
+ */
 public class GameState {
   private int level;
   private int hearts;

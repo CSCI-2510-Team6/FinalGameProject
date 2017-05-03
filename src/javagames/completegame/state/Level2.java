@@ -23,6 +23,13 @@ import sprite.Grunt;
 import sprite.Sorceress;
 import sprite.Sprite;
 
+/**
+ * This class manages the objects and rendering of level 2
+ *
+ * @author Andres
+ * @author Kristopher
+ *
+ */
 public class Level2 extends State {
 
   private Camera                 camera;
@@ -49,6 +56,7 @@ public class Level2 extends State {
   private String[]               text   = new String[4];
   protected Dialogue             dialog = new Dialogue();
 
+  // Constructor
   public Level2(final GameState state) {
     this.state = state;
     for (int x = 0; x < text.length; x++) {
@@ -62,6 +70,7 @@ public class Level2 extends State {
     dialogFlag = true;
     colliderManager = new ColliderManager();
     background = (CollidableSprite) controller.getAttribute("level2");
+
     hero = (Sorceress) controller.getAttribute("hero");
     hero.setAirSlashImage(
         (BufferedImage) controller.getAttribute("airSlashImage"));

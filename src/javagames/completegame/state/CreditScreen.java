@@ -16,6 +16,7 @@ import javagames.util.Utility;
  *
  * @author Timothy Wright
  * @author Andres Ward
+ * @author Kristopher
  *
  */
 public class CreditScreen extends State {
@@ -25,6 +26,7 @@ public class CreditScreen extends State {
   protected Dialogue    dialog = new Dialogue();
   private int           index;
 
+  // Constructor
   public CreditScreen() {
     for (int x = 0; x < textB.length; x++) {
       textB[x] = "";
@@ -49,6 +51,7 @@ public class CreditScreen extends State {
     if (textB == null) {
       super.processInput(delta);
 
+      // Return to title screen
       if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
         getController().setState(new TitleScreen());
       }

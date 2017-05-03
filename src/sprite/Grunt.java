@@ -12,6 +12,12 @@ import javagames.util.Matrix3x3f;
 import javagames.util.Utility;
 import javagames.util.Vector2f;
 
+/**
+ * This class represents the Grunt enemy
+ *
+ * @author Andres
+ *
+ */
 public class Grunt extends CollidableSprite {
 
   private enum Action {
@@ -39,6 +45,7 @@ public class Grunt extends CollidableSprite {
   private Action                action;
   private boolean               facingRight;
 
+  // Constructor
   public Grunt(final float xPos, final float yPos, final int width,
       final int height, final BufferedImage image, final Collider col) {
     super(xPos, yPos, width, height, image, col);

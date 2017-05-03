@@ -9,12 +9,19 @@ import javagames.util.Matrix3x3f;
 import javagames.util.Utility;
 import sprite.CollidableSprite;
 
+/**
+ * This class displays a preview of the upcoming level and its stage number
+ *
+ * @author Andres
+ *
+ */
 public class LevelStarting1 extends State {
 
   private CollidableSprite background;
   private final GameState  state;
   private double           time;
 
+  // Constructor
   public LevelStarting1(final GameState state) {
     this.state = state;
   }

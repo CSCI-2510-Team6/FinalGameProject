@@ -17,6 +17,7 @@ import javagames.util.Utility;
  *
  * @author Timothy Wright
  * @author Andres Ward
+ * @author Kristopher
  *
  */
 public class TitleScreen extends State {
@@ -29,6 +30,7 @@ public class TitleScreen extends State {
   private String[]        msg    = { "WONDER KEITH AND NO BROTHERS", "", "", "",
       "PRESS SPACE TO PLAY", "", "PRESS ESC TO EXIT" };
 
+  // Constructor
   public TitleScreen() {
     for (int x = 0; x < text.length; x++) {
       text[x] = "";

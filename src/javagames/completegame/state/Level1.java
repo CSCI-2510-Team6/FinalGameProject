@@ -19,6 +19,12 @@ import sprite.Grunt;
 import sprite.Sorceress;
 import sprite.Sprite;
 
+/**
+ * This class manages the objects and rendering of level 1
+ *
+ * @author Andres
+ *
+ */
 public class Level1 extends State {
 
   private Camera                 camera;
@@ -40,6 +46,7 @@ public class Level1 extends State {
   private QuickRestart           shieldHit;
   private float                  invincibilityTime;
 
+  // Constructor
   public Level1(final GameState state) {
     this.state = state;
   }
@@ -48,6 +55,7 @@ public class Level1 extends State {
   public void enter() {
     colliderManager = new ColliderManager();
     background = (CollidableSprite) controller.getAttribute("level1");
+
     hero = (Sorceress) controller.getAttribute("hero");
     hero.setAirSlashImage(
         (BufferedImage) controller.getAttribute("airSlashImage"));

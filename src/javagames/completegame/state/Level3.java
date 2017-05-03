@@ -23,6 +23,13 @@ import sprite.Grunt;
 import sprite.Sorceress;
 import sprite.Sprite;
 
+/**
+ * This class manages the objects and rendering of level 3
+ *
+ * @author Andres
+ * @author Kristopher
+ *
+ */
 public class Level3 extends State {
 
   private Camera                 camera;
@@ -48,6 +55,7 @@ public class Level3 extends State {
   private String[]               textA  = new String[4];
   protected Dialogue             dialog = new Dialogue();
 
+  // Constructor
   public Level3(final GameState state) {
 
     this.state = state;

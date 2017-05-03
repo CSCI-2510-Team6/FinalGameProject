@@ -88,7 +88,7 @@ public class LoadGame extends State {
           "/images/backgrounds/Forest1.png");
       final BufferedImage image = ImageIO.read(stream);
 
-      // Initialize levelA background
+      // Initialize level1 background
       final List<BoundingShape> backInner = new ArrayList<>();
 
       // background inner bounding shapes
@@ -157,7 +157,7 @@ public class LoadGame extends State {
           "/images/backgrounds/Forest2.png");
       final BufferedImage image = ImageIO.read(stream);
 
-      // Initialize levelA background
+      // Initialize level2 background
       final List<BoundingShape> backInner = new ArrayList<>();
 
       // background inner bounding shapes
@@ -226,7 +226,7 @@ public class LoadGame extends State {
           "/images/backgrounds/CastleLevel.png");
       final BufferedImage image = ImageIO.read(stream);
 
-      // Initialize levelA background
+      // Initialize level3 background
       final List<BoundingShape> backInner = new ArrayList<>();
 
       // background inner bounding shapes
@@ -418,10 +418,10 @@ public class LoadGame extends State {
           "/images/characters/knightSheet.png");
       final BufferedImage image = ImageIO.read(stream);
 
-      // Initialize hero
+      // Initialize enemy
       final Vector2f enemyCenter = new Vector2f(0, 0);
 
-      // hero inner bounding shape
+      // enemy inner bounding shape
       final List<BoundingShape> enemyInner = new ArrayList<>();
       final Vector2f enemyMaxA = enemyCenter.add(new Vector2f(0.4f, 0.8f));
       final Vector2f enemyMinA = enemyCenter.sub(new Vector2f(0.4f, 0.8f));
@@ -444,10 +444,10 @@ public class LoadGame extends State {
           "/images/characters/GruntSprites.png");
       final BufferedImage image = ImageIO.read(stream);
 
-      // Initialize hero
+      // Initialize enemy
       final Vector2f enemyCenter = new Vector2f(0, 0);
 
-      // hero inner bounding shape
+      // enemy inner bounding shape
       final List<BoundingShape> enemyInner = new ArrayList<>();
       final Vector2f enemyMaxA = enemyCenter.add(new Vector2f(0.2f, 0.6f));
       final Vector2f enemyMinA = enemyCenter.sub(new Vector2f(0.2f, 0.6f));

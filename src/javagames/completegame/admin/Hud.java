@@ -7,10 +7,17 @@ import java.util.List;
 import javagames.util.Matrix3x3f;
 import sprite.Sprite;
 
+/**
+ * This class is in charge of drawing the virtual interface
+ *
+ * @author Andres
+ *
+ */
 public class Hud {
   private final Sprite       hud;
   private final List<Sprite> hearts;
 
+  // Constructor
   public Hud(final Sprite hud, final Sprite heart) {
     this.hud = hud;
     hearts = new ArrayList<>();
