@@ -22,6 +22,7 @@ public class LevelStarting1 extends State {
   @Override
   public void enter() {
     background = (CollidableSprite) controller.getAttribute("level1");
+    state.setHearts(3);
     time = 0.0;
   }
 
