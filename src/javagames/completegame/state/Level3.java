@@ -1,5 +1,7 @@
 package javagames.completegame.state;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -10,8 +12,10 @@ import collision.ColliderManager;
 import javagames.completegame.admin.Hud;
 import javagames.completegame.admin.QuickRestart;
 import javagames.util.Camera;
+import javagames.util.Dialogue;
 import javagames.util.KeyboardInput;
 import javagames.util.Matrix3x3f;
+import javagames.util.Utility;
 import javagames.util.Vector2f;
 import sprite.CollidableSprite;
 import sprite.EvilKnight;
@@ -28,21 +32,31 @@ public class Level3 extends State {
   private Grunt                  grunt;
   private EvilKnight             evilKnight;
   private KeyboardInput          keys;
-  private boolean                drawBounds;
+  private boolean                drawBounds, levelOver;
   private Hud                    hud;
   private Sprite                 hudDisplay;
   private Sprite                 heart;
   private final GameState        state;
   private List<CollidableSprite> shots;
   private QuickRestart           daggerSound;
-  private float                  invincibilityTime;
+  private boolean				 dialogFlag;
+  private int					 index;
+  private String[]        		 textA   = new String[4];
+  protected Dialogue      dialog = new Dialogue();
 
   public Level3(final GameState state) {
+	  
     this.state = state;
+    for (int x = 0; x < textA.length; x++) {
+        textA[x] = "";
+      }
+
+	dialogFlag = levelOver = false;
   }
 
   @Override
   public void enter() {
+	index = 0;
     colliderManager = new ColliderManager();
     background = (CollidableSprite) controller.getAttribute("level3");
     hero = (Sorceress) controller.getAttribute("hero");
@@ -76,6 +90,8 @@ public class Level3 extends State {
 
   @Override
   public void processInput(final float delta) {
+	  if(textA == null)
+		{
     // movement, don't allow both A and D keys to cause action together.
     if (keys.keyDown(KeyEvent.VK_A) != keys.keyDown(KeyEvent.VK_D)) {
       // Move Left
@@ -111,6 +127,23 @@ public class Level3 extends State {
     if (keys.keyDownOnce(KeyEvent.VK_B)) {
       drawBounds = !drawBounds;
     }
+		}
+	 
+		else
+		{
+			hero.stopMoving();
+		 if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
+		      if (index < textA.length) {
+		        textA[index] = dialog.LevelThreeADialogue();
+		        index++;
+		      }
+		      else {
+		        textA = null;
+		        index = 0;
+		        dialog = new Dialogue();
+		      }
+		    }
+		}
   }
 
   @Override
@@ -168,9 +201,9 @@ public class Level3 extends State {
   }
 
   private void checkForLevelWon() {
-    if (hero.getCenterPosition().x > 25) {
-      state.setLevel(state.getLevel() + 1);
-      getController().setState(new CreditScreen());
+    if (hero.getCenterPosition().x > 25) {  
+    	state.setLevel(state.getLevel() + 1);
+        getController().setState(new CreditScreen());
     }
   }
 
@@ -190,22 +223,34 @@ public class Level3 extends State {
   @Override
   public void render(final Graphics2D g, final Matrix3x3f view) {
     // begin of camera
-    final Vector2f cameraPosInScreenCoords = view.mul(camera.getPosition());
-    g.translate(cameraPosInScreenCoords.x, cameraPosInScreenCoords.y);
-    background.render(g, view, drawBounds);
-    for (final CollidableSprite shot : shots) {
-      shot.render(g, view, drawBounds);
-    }
+	  
+	if (textA != null) 
+    {
+		g.setFont(new Font("Arial", Font.PLAIN, 20));
+		g.setColor(Color.ORANGE);
 
+      Utility.drawString(g, 10, 100, textA);
+
+    }
+	else
+	{
+	    final Vector2f cameraPosInScreenCoords = view.mul(camera.getPosition());
+	    g.translate(cameraPosInScreenCoords.x, cameraPosInScreenCoords.y);
+	    background.render(g, view, drawBounds);
+	    for (final CollidableSprite shot : shots) {
+	      shot.render(g, view, drawBounds);
+	    }
+	
     grunt.render(g, view, drawBounds);
     evilKnight.render(g, view, drawBounds);
 
-    hero.render(g, view, drawBounds);
-    // end of camera
-    g.translate(-cameraPosInScreenCoords.x, -cameraPosInScreenCoords.y);
-    g.translate(0, 0);
-    // update Hud display
-    hud.drawHud(g, view, state.getHearts());
+	    hero.render(g, view, drawBounds);
+	    // end of camera
+	    g.translate(-cameraPosInScreenCoords.x, -cameraPosInScreenCoords.y);
+	    g.translate(0, 0);
+	    // update Hud display
+	    hud.drawHud(g, view, state.getHearts());
+	}
   }
 
   /**

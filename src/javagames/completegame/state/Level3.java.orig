@@ -23,7 +23,7 @@ import sprite.Grunt;
 import sprite.Sorceress;
 import sprite.Sprite;
 
-public class Level2 extends State {
+public class Level3 extends State {
 
   private Camera                 camera;
   private ColliderManager        colliderManager;
@@ -32,43 +32,49 @@ public class Level2 extends State {
   private Grunt                  grunt;
   private EvilKnight             evilKnight;
   private KeyboardInput          keys;
-  private boolean                drawBounds;
+  private boolean                drawBounds, levelOver;
   private Hud                    hud;
   private Sprite                 hudDisplay;
   private Sprite                 heart;
   private final GameState        state;
   private List<CollidableSprite> shots;
   private QuickRestart           daggerSound;
+<<<<<<< HEAD
+  private float                  invincibilityTime;
+=======
   private boolean				 dialogFlag;
   private int					 index;
-  private String[]        		 text   = new String[4];
+  private String[]        		 textA   = new String[4];
   protected Dialogue      dialog = new Dialogue();
+>>>>>>> b1afe78ba1103c3e9717738d224406331de39eaf
 
-  public Level2(final GameState state) {
+  public Level3(final GameState state) {
+	  
     this.state = state;
-    for (int x = 0; x < text.length; x++) {
-        text[x] = "";
+    for (int x = 0; x < textA.length; x++) {
+        textA[x] = "";
       }
+
+	dialogFlag = levelOver = false;
   }
 
   @Override
   public void enter() {
 	index = 0;
-	dialogFlag = true;
     colliderManager = new ColliderManager();
-    background = (CollidableSprite) controller.getAttribute("level2");
+    background = (CollidableSprite) controller.getAttribute("level3");
     hero = (Sorceress) controller.getAttribute("hero");
     hero.setAirSlashImage(
         (BufferedImage) controller.getAttribute("airSlashImage"));
-    hero.setCenterPosition(new Vector2f(-45, 0));
+    hero.setCenterPosition(new Vector2f(-25, 0));
 
     grunt = (Grunt) controller.getAttribute("grunt");
-    grunt.setCenterPosition(new Vector2f(-40, 0));
+    grunt.setCenterPosition(new Vector2f(-20, 0));
     grunt.resetState();
     grunt.defaultAction();
 
     evilKnight = (EvilKnight) controller.getAttribute("evilKnight");
-    evilKnight.setCenterPosition(new Vector2f(40, 0));
+    evilKnight.setCenterPosition(new Vector2f(20, 0));
     evilKnight.resetState();
     evilKnight.defaultAction();
 
@@ -88,59 +94,60 @@ public class Level2 extends State {
 
   @Override
   public void processInput(final float delta) {
-	  
-	if(!dialogFlag)
-	{
-	    // movement, don't allow both A and D keys to cause action together.
-	    if (keys.keyDown(KeyEvent.VK_A) != keys.keyDown(KeyEvent.VK_D)) {
-	      // Move Left
-	      if (keys.keyDown(KeyEvent.VK_A)) {
-	        hero.moveLeft();
-	      }
-	      // Move Right
-	      if (keys.keyDown(KeyEvent.VK_D)) {
-	        hero.moveRight();
-	      }
-	    }
-	    else {
-	      hero.stopMoving();
-	    }
-	    // jump
-	    if (keys.keyDown(KeyEvent.VK_J) && !hero.isJumpButtonHeld()
-	        && !hero.isInAir() && !hero.isJumpDisabled()) {
-	      hero.pressJumpButton();
-	    }
-	    // Handles variable jump based on length of time jump button is pressed
-	    if (hero.isJumpButtonHeld()) {
-	      hero.jump(delta);
-	    }
-	    if (!keys.keyDown(KeyEvent.VK_J)) {
-	      hero.releaseJumpButton();
-	    }
-	    if (keys.keyDownOnce(KeyEvent.VK_K) && hero.canAttack()) {
-	      shots.add(hero.melee());
-	      // Play air slash sound
-	      daggerSound.fire();
-	    }
-	    // Toggle collider rendering
-	    if (keys.keyDownOnce(KeyEvent.VK_B)) {
-	      drawBounds = !drawBounds;
-	    }
-	}
-	else
-	{
-		hero.stopMoving();
-	 if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
-	      if (index < text.length) {
-	        text[index] = dialog.LevelTwoDialogue();
-	        index++;
-	      }
-	      else {
-	        text = null;
-	        dialogFlag = false;
-	      }
-	    }
-	}
+	  if(textA == null)
+		{
+    // movement, don't allow both A and D keys to cause action together.
+    if (keys.keyDown(KeyEvent.VK_A) != keys.keyDown(KeyEvent.VK_D)) {
+      // Move Left
+      if (keys.keyDown(KeyEvent.VK_A)) {
+        hero.moveLeft();
+      }
+      // Move Right
+      if (keys.keyDown(KeyEvent.VK_D)) {
+        hero.moveRight();
+      }
+    }
+    else {
+      hero.stopMoving();
+    }
+    // jump
+    if (keys.keyDown(KeyEvent.VK_J) && !hero.isJumpButtonHeld()
+        && !hero.isInAir() && !hero.isJumpDisabled()) {
+      hero.pressJumpButton();
+    }
+    // Handles variable jump based on length of time jump button is pressed
+    if (hero.isJumpButtonHeld()) {
+      hero.jump(delta);
+    }
+    if (!keys.keyDown(KeyEvent.VK_J)) {
+      hero.releaseJumpButton();
+    }
+    if (keys.keyDownOnce(KeyEvent.VK_K) && hero.canAttack()) {
+      shots.add(hero.melee());
+      // Play air slash sound
+      daggerSound.fire();
+    }
+    // Toggle collider rendering
+    if (keys.keyDownOnce(KeyEvent.VK_B)) {
+      drawBounds = !drawBounds;
+    }
+		}
+	 
+		else
+		{
+			hero.stopMoving();
+		 if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
+		      if (index < textA.length) {
+		        textA[index] = dialog.LevelThreeADialogue();
+		        index++;
+		      }
+		      else {
+		        textA = null;
+		        index = 0;
+		        dialog = new Dialogue();
+		      }
+		    }
+		}
   }
 
   @Override
@@ -148,7 +155,6 @@ public class Level2 extends State {
     background.updateWorld(delta);
 
     hero.updateWorld(delta);
-
     int collisionDirection;
 
     grunt.updateWorld(delta, hero.getCenterPosition());
@@ -199,21 +205,21 @@ public class Level2 extends State {
   }
 
   private void checkForLevelWon() {
-    if (hero.getCenterPosition().x > 45) {
-      state.setLevel(state.getLevel() + 1);
-      getController().setState(new LevelStarting3(state));
+    if (hero.getCenterPosition().x > 25) {  
+    	state.setLevel(state.getLevel() + 1);
+        getController().setState(new CreditScreen());
     }
   }
 
   private void checkForOutOfBounds() {
     if (hero.getCenterPosition().y < -5.5f) {
-      hero.setCenterPosition(new Vector2f(-45f, 0f));
+      hero.setCenterPosition(new Vector2f(-25f, 0f));
     }
   }
 
   private void checkForEmptyHearts() {
     if (state.getHearts() < 1) {
-      hero.setCenterPosition(new Vector2f(-45f, 0f));
+      hero.setCenterPosition(new Vector2f(-25f, 0f));
       state.setHearts(3);
     }
   }
@@ -221,24 +227,13 @@ public class Level2 extends State {
   @Override
   public void render(final Graphics2D g, final Matrix3x3f view) {
     // begin of camera
-	    
-    if (text != null) 
+	  
+	if (textA != null) 
     {
-    g.setFont(new Font("Arial", Font.PLAIN, 20));
-    g.setColor(Color.ORANGE);
+		g.setFont(new Font("Arial", Font.PLAIN, 20));
+		g.setColor(Color.ORANGE);
 
-      Utility.drawString(g, 10, 100, text);
-
-    }
-    else
-    {
-    final Vector2f cameraPosInScreenCoords = view.mul(camera.getPosition());
-    g.translate(cameraPosInScreenCoords.x, cameraPosInScreenCoords.y);
-    background.render(g, view, drawBounds);
-    for (final CollidableSprite shot : shots) {
-      shot.render(g, view, drawBounds);
-    }
-
+<<<<<<< HEAD
     grunt.render(g, view, drawBounds);
     evilKnight.render(g, view, drawBounds);
 
@@ -248,8 +243,27 @@ public class Level2 extends State {
     g.translate(0, 0);
     // update Hud display
     hud.drawHud(g, view, state.getHearts());
-    }
+=======
+      Utility.drawString(g, 10, 100, textA);
 
+    }
+	else
+	{
+	    final Vector2f cameraPosInScreenCoords = view.mul(camera.getPosition());
+	    g.translate(cameraPosInScreenCoords.x, cameraPosInScreenCoords.y);
+	    background.render(g, view, drawBounds);
+	    for (final CollidableSprite shot : shots) {
+	      shot.render(g, view, drawBounds);
+	    }
+	
+	    hero.render(g, view, drawBounds);
+	    // end of camera
+	    g.translate(-cameraPosInScreenCoords.x, -cameraPosInScreenCoords.y);
+	    g.translate(0, 0);
+	    // update Hud display
+	    hud.drawHud(g, view, state.getHearts());
+	}
+>>>>>>> b1afe78ba1103c3e9717738d224406331de39eaf
   }
 
   /**

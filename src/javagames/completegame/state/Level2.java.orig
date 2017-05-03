@@ -39,10 +39,14 @@ public class Level2 extends State {
   private final GameState        state;
   private List<CollidableSprite> shots;
   private QuickRestart           daggerSound;
+<<<<<<< HEAD
+  private float                  invincibilityTime;
+=======
   private boolean				 dialogFlag;
   private int					 index;
   private String[]        		 text   = new String[4];
   protected Dialogue      dialog = new Dialogue();
+>>>>>>> b1afe78ba1103c3e9717738d224406331de39eaf
 
   public Level2(final GameState state) {
     this.state = state;

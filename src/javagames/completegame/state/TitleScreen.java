@@ -23,7 +23,7 @@ public class TitleScreen extends State {
   protected KeyboardInput keys;
   protected Dialogue      dialog = new Dialogue();
   int                     index  = 0;
-  private String[]        text   = new String[23];
+  private String[]        text   = new String[24];
   private String[]        msg    = { "WONDER KEITH AND NO BROTHERS", "", "", "",
       "PRESS SPACE TO PLAY", "", "PRESS ESC TO EXIT" };
 
