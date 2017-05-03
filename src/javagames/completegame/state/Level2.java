@@ -1,5 +1,7 @@
 package javagames.completegame.state;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -10,8 +12,10 @@ import collision.ColliderManager;
 import javagames.completegame.admin.Hud;
 import javagames.completegame.admin.QuickRestart;
 import javagames.util.Camera;
+import javagames.util.Dialogue;
 import javagames.util.KeyboardInput;
 import javagames.util.Matrix3x3f;
+import javagames.util.Utility;
 import javagames.util.Vector2f;
 import sprite.CollidableSprite;
 import sprite.Sorceress;
@@ -31,13 +35,22 @@ public class Level2 extends State {
   private final GameState        state;
   private List<CollidableSprite> shots;
   private QuickRestart           daggerSound;
+  private boolean				 dialogFlag;
+  private int					 index;
+  private String[]        		 text   = new String[4];
+  protected Dialogue      dialog = new Dialogue();
 
   public Level2(final GameState state) {
     this.state = state;
+    for (int x = 0; x < text.length; x++) {
+        text[x] = "";
+      }
   }
 
   @Override
   public void enter() {
+	index = 0;
+	dialogFlag = true;
     colliderManager = new ColliderManager();
     background = (CollidableSprite) controller.getAttribute("level2");
     hero = (Sorceress) controller.getAttribute("hero");
@@ -60,41 +73,59 @@ public class Level2 extends State {
 
   @Override
   public void processInput(final float delta) {
-    // movement, don't allow both A and D keys to cause action together.
-    if (keys.keyDown(KeyEvent.VK_A) != keys.keyDown(KeyEvent.VK_D)) {
-      // Move Left
-      if (keys.keyDown(KeyEvent.VK_A)) {
-        hero.moveLeft();
-      }
-      // Move Right
-      if (keys.keyDown(KeyEvent.VK_D)) {
-        hero.moveRight();
-      }
-    }
-    else {
-      hero.stopMoving();
-    }
-    // jump
-    if (keys.keyDown(KeyEvent.VK_J) && !hero.isJumpButtonHeld()
-        && !hero.isInAir() && !hero.isJumpDisabled()) {
-      hero.pressJumpButton();
-    }
-    // Handles variable jump based on length of time jump button is pressed
-    if (hero.isJumpButtonHeld()) {
-      hero.jump(delta);
-    }
-    if (!keys.keyDown(KeyEvent.VK_J)) {
-      hero.releaseJumpButton();
-    }
-    if (keys.keyDownOnce(KeyEvent.VK_K) && hero.canAttack()) {
-      shots.add(hero.melee());
-      // Play air slash sound
-      daggerSound.fire();
-    }
-    // Toggle collider rendering
-    if (keys.keyDownOnce(KeyEvent.VK_B)) {
-      drawBounds = !drawBounds;
-    }
+	  
+	if(!dialogFlag)
+	{
+	    // movement, don't allow both A and D keys to cause action together.
+	    if (keys.keyDown(KeyEvent.VK_A) != keys.keyDown(KeyEvent.VK_D)) {
+	      // Move Left
+	      if (keys.keyDown(KeyEvent.VK_A)) {
+	        hero.moveLeft();
+	      }
+	      // Move Right
+	      if (keys.keyDown(KeyEvent.VK_D)) {
+	        hero.moveRight();
+	      }
+	    }
+	    else {
+	      hero.stopMoving();
+	    }
+	    // jump
+	    if (keys.keyDown(KeyEvent.VK_J) && !hero.isJumpButtonHeld()
+	        && !hero.isInAir() && !hero.isJumpDisabled()) {
+	      hero.pressJumpButton();
+	    }
+	    // Handles variable jump based on length of time jump button is pressed
+	    if (hero.isJumpButtonHeld()) {
+	      hero.jump(delta);
+	    }
+	    if (!keys.keyDown(KeyEvent.VK_J)) {
+	      hero.releaseJumpButton();
+	    }
+	    if (keys.keyDownOnce(KeyEvent.VK_K) && hero.canAttack()) {
+	      shots.add(hero.melee());
+	      // Play air slash sound
+	      daggerSound.fire();
+	    }
+	    // Toggle collider rendering
+	    if (keys.keyDownOnce(KeyEvent.VK_B)) {
+	      drawBounds = !drawBounds;
+	    }
+	}
+	else
+	{
+		hero.stopMoving();
+	 if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
+	      if (index < text.length) {
+	        text[index] = dialog.LevelTwoDialogue();
+	        index++;
+	      }
+	      else {
+	        text = null;
+	        dialogFlag = false;
+	      }
+	    }
+	}
   }
 
   @Override
@@ -133,6 +164,17 @@ public class Level2 extends State {
   @Override
   public void render(final Graphics2D g, final Matrix3x3f view) {
     // begin of camera
+	    
+    if (text != null) 
+    {
+    g.setFont(new Font("Arial", Font.PLAIN, 20));
+    g.setColor(Color.ORANGE);
+
+      Utility.drawString(g, 10, 100, text);
+
+    }
+    else
+    {
     final Vector2f cameraPosInScreenCoords = view.mul(camera.getPosition());
     g.translate(cameraPosInScreenCoords.x, cameraPosInScreenCoords.y);
     background.render(g, view, drawBounds);
@@ -146,6 +188,8 @@ public class Level2 extends State {
     g.translate(0, 0);
     // update Hud display
     hud.drawHud(g, view, state.getHearts());
+    }
+
   }
 
   /**

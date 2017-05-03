@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 
+import javagames.util.Dialogue;
 import javagames.util.KeyboardInput;
 import javagames.util.Matrix3x3f;
 import javagames.util.Utility;
@@ -20,6 +21,16 @@ import javagames.util.Utility;
 public class CreditScreen extends State {
 
   private KeyboardInput keys;
+  private String[]        		 textB   = new String[8];
+  protected Dialogue      dialog = new Dialogue();
+  private int					 index;
+  
+  public CreditScreen()
+  {
+    for (int x = 0; x < textB.length; x++) {
+        textB[x] = "";
+      }
+  }
 
   // Text for the credits
   private static final String[] creditInfo =
@@ -37,24 +48,52 @@ public class CreditScreen extends State {
 
   @Override
   public void processInput(final float delta) {
-    super.processInput(delta);
-
-    if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
-      getController().setState(new TitleScreen());
+	if(textB == null)
+	{
+	    super.processInput(delta);
+	
+	    if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
+	      getController().setState(new TitleScreen());
+	    }
     }
+	else
+	{
+	 if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
+	      if (index < textB.length) {
+	        textB[index] = dialog.LevelThreeBDialogue();
+	        index++;
+	      }
+	      else {
+	        textB = null;
+	        index = 0;
+	      }
+	    }
+	}
   }
 
   @Override
   public void render(final Graphics2D g, final Matrix3x3f view) {
-    super.render(g, view);
+	  
+	  if (textB != null) 
+	    {
+		    g.setFont(new Font("Arial", Font.PLAIN, 20));
+		    g.setColor(Color.ORANGE);
 
-    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+	      Utility.drawString(g, 10, 100, textB);
 
-    g.setFont(new Font("Arial", Font.PLAIN, 20));
-    g.setColor(Color.GREEN);
-
-    Utility.drawCenteredString(g, app.getScreenWidth(),
-        app.getScreenHeight() / 3, CreditScreen.creditInfo);
+	    }
+	  else
+	  {
+	    super.render(g, view);
+	
+	    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+	        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+	
+	    g.setFont(new Font("Arial", Font.PLAIN, 20));
+	    g.setColor(Color.GREEN);
+	
+	    Utility.drawCenteredString(g, app.getScreenWidth(),
+	        app.getScreenHeight() / 3, CreditScreen.creditInfo);
+	  }
   }
 }
