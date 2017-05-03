@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 
+import javagames.completegame.admin.QuickRestart;
 import javagames.util.Dialogue;
 import javagames.util.KeyboardInput;
 import javagames.util.Matrix3x3f;
@@ -25,6 +26,7 @@ public class CreditScreen extends State {
   private String[]      textB  = new String[8];
   protected Dialogue    dialog = new Dialogue();
   private int           index;
+  private QuickRestart  continueSound;
 
   // Constructor
   public CreditScreen() {
@@ -34,16 +36,18 @@ public class CreditScreen extends State {
   }
 
   // Text for the credits
-  private static final String[] creditInfo = {
-      "Wonder Keith and No Brothers - version 1.0",
-      "Programmed by: Kristopher Davlin, Paul Growney, Tyler Veseth, Andres Ward",
-      "Special thanks to:", "Timothy Wright", "cynicmusic", "artisticdude",
-      "Damaged Panda", "Buch", "skoam", "trashmney034", "Matheus Carvalho" };
+  private static final String[] creditInfo =
+      { "Wonder Keith and No Brothers - version 1.0", "",
+          "Programmed by: Kristopher Davlin, Paul Growney, Tyler Veseth, Andres Ward",
+          "", "Special thanks to:", "", "Timothy Wright", "cynicmusic",
+          "artisticdude", "Damaged Panda", "Buch", "skoam", "trashmney034",
+          "Matheus Carvalho" };
 
   @Override
   public void enter() {
     super.enter();
     keys = (KeyboardInput) controller.getAttribute("keys");
+    continueSound = (QuickRestart) controller.getAttribute("continue");
   }
 
   @Override
@@ -61,6 +65,7 @@ public class CreditScreen extends State {
         if (index < textB.length) {
           textB[index] = dialog.LevelThreeBDialogue();
           index++;
+          continueSound.fire();
         }
         else {
           textB = null;
