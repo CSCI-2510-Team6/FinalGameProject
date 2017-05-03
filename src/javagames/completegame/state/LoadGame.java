@@ -32,6 +32,7 @@ import javagames.util.Utility;
 import javagames.util.Vector2f;
 import sprite.CollidableSprite;
 import sprite.EvilKnight;
+import sprite.Grunt;
 import sprite.Sorceress;
 import sprite.Sprite;
 
@@ -434,6 +435,32 @@ public class LoadGame extends State {
           440, image, enemyCollider);
 
       controller.setAttribute("evilKnight", enemy);
+      return Boolean.TRUE;
+    });
+
+    loadTasks.add(() -> {
+      final InputStream stream = ResourceLoader.load(LoadGame.class,
+          "res/assets/images/characters/GruntSprites.png",
+          "/images/characters/GruntSprites.png");
+      final BufferedImage image = ImageIO.read(stream);
+
+      // Initialize hero
+      final Vector2f enemyCenter = new Vector2f(0, 0);
+
+      // hero inner bounding shape
+      final List<BoundingShape> enemyInner = new ArrayList<>();
+      final Vector2f enemyMaxA = enemyCenter.add(new Vector2f(0.2f, 0.6f));
+      final Vector2f enemyMinA = enemyCenter.sub(new Vector2f(0.2f, 0.6f));
+      enemyInner.add(new BoundingBox(enemyMaxA, enemyMinA));
+
+      // enemy collider object
+      final Collider enemyCollider =
+          new Collider(enemyCenter, 0.4f, 1.2f, enemyInner);
+      // Create the enemy sprite
+      final Grunt enemy = new Grunt(enemyCenter.x, enemyCenter.y, 6800, 1480,
+          image, enemyCollider);
+
+      controller.setAttribute("grunt", enemy);
       return Boolean.TRUE;
     });
 

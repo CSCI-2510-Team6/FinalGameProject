@@ -19,9 +19,9 @@ import javagames.util.Vector2f;
  */
 public class Collider {
 
-  private final BoundingShape       outerBound;
-  private final List<BoundingShape> innerBounds;
-  private final Matrix3x3f          world;
+  private final BoundingShape outerBound;
+  private List<BoundingShape> innerBounds;
+  private final Matrix3x3f    world;
 
   // Constructor for Collider with a Bounding Box as outer bounding shape
   public Collider(final Vector2f center, final float width, final float height,
@@ -59,6 +59,10 @@ public class Collider {
    */
   public List<BoundingShape> getInnerBounds() {
     return innerBounds;
+  }
+
+  public void setInnerBounds(final List<BoundingShape> col) {
+    innerBounds = col;
   }
 
   /**
@@ -196,7 +200,7 @@ public class Collider {
 
   /**
    * Shift a bounding shape to its new spot
-   * 
+   *
    * @param shape
    * @param shift
    */
