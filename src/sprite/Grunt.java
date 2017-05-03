@@ -37,7 +37,7 @@ public class Grunt extends CollidableSprite {
   private int                   dieRightIndex;
   private float                 animationTime;
   private Action                action;
-  private final boolean         facingRight;
+  private boolean               facingRight;
 
   public Grunt(final float xPos, final float yPos, final int width,
       final int height, final BufferedImage image, final Collider col) {
@@ -65,8 +65,8 @@ public class Grunt extends CollidableSprite {
   public void handleInjury() {
     if (action != Action.DEAD) {
       action = Action.DEAD;
+      setVelocity(new Vector2f(0, getVelocity().y));
     }
-    resetState();
   }
 
   /**
@@ -84,12 +84,21 @@ public class Grunt extends CollidableSprite {
     super.uncollide(direction);
   }
 
-  @Override
-  public void updateWorld(final float delta) {
+  public void updateWorld(final float delta, final Vector2f heroPos) {
     setVelocity(getVelocity().sub(new Vector2f(0, EvilKnight.GRAVITY * delta)));
     setCenterPosition(getCenterPosition().add(getVelocity().mul(delta)));
     // Set the origin in the matrix
     setWorld(Matrix3x3f.translate(getCenterPosition()));
+
+    if (withinVision(heroPos) && (action != Action.DEAD)) {
+      if (isLeft(heroPos)) {
+        moveLeft();
+      }
+      else {
+        moveRight();
+      }
+    }
+
     animationTime += delta;
     // Here the animation state is determined and the proper frame of animation
     // from the animation arrays is selected. The power of modulus is really
@@ -106,9 +115,17 @@ public class Grunt extends CollidableSprite {
       case MOVE:
         // Facing left
         if (!facingRight) {
+          if (animationTime > 0.25f) {
+            moveLeftIndex = ++moveLeftIndex % moveLeft.length;
+            animationTime -= 0.25f;
+          }
         }
         // Facing right same as above
         else {
+          if (animationTime > 0.25f) {
+            moveRightIndex = ++moveRightIndex % moveRight.length;
+            animationTime -= 0.25f;
+          }
         }
         break;
       case ATTACK:
@@ -126,14 +143,15 @@ public class Grunt extends CollidableSprite {
         }
         break;
       case DEAD:
-        if (!facingRight) {
+        if (!facingRight && (dieLeftIndex != (dieLeft.length - 1))) {
           if ((animationTime > 0.25f)) {
             dieLeftIndex = ++dieLeftIndex % dieLeft.length;
             animationTime -= 0.25f;
           }
         }
         else {
-          if ((animationTime > 0.25f)) {
+          if (((animationTime > 0.25f)
+              && (dieRightIndex != (dieRight.length - 1)))) {
             dieRightIndex = ++dieRightIndex % dieRight.length;
             animationTime -= 0.25f;
           }
@@ -197,7 +215,7 @@ public class Grunt extends CollidableSprite {
         break;
     }
     // Draw the collider shapes if necessary
-    if (drawCollider) {
+    if (drawCollider && (getCollider() != null)) {
       getCollider().render(g, screen);
     }
   }
@@ -331,54 +349,97 @@ public class Grunt extends CollidableSprite {
         getImage().getSubimage(width * 8, height, width, height), desiredWidth,
         desiredHeight);
 
-    dieLeft[0] = Utility.scaleImage(
+    dieLeft[0] =
+        Utility.scaleImage(getImage().getSubimage(0, height * 2, width, height),
+            desiredWidth, desiredHeight);
+    dieLeft[1] = Utility.scaleImage(
         getImage().getSubimage(width, height * 2, width, height), desiredWidth,
         desiredHeight);
-    dieLeft[1] = Utility.scaleImage(
+    dieLeft[2] = Utility.scaleImage(
         getImage().getSubimage(width * 2, height * 2, width, height),
         desiredWidth, desiredHeight);
-    dieLeft[2] = Utility.scaleImage(
+    dieLeft[3] = Utility.scaleImage(
         getImage().getSubimage(width * 3, height * 2, width, height),
         desiredWidth, desiredHeight);
-    dieLeft[3] = Utility.scaleImage(
+    dieLeft[4] = Utility.scaleImage(
         getImage().getSubimage(width * 4, height * 2, width, height),
         desiredWidth, desiredHeight);
-    dieLeft[4] = Utility.scaleImage(
+    dieLeft[5] = Utility.scaleImage(
         getImage().getSubimage(width * 5, height * 2, width, height),
         desiredWidth, desiredHeight);
-    dieLeft[5] = Utility.scaleImage(
+    dieLeft[6] = Utility.scaleImage(
         getImage().getSubimage(width * 6, height * 2, width, height),
         desiredWidth, desiredHeight);
-    dieLeft[6] = Utility.scaleImage(
+    dieLeft[7] = Utility.scaleImage(
         getImage().getSubimage(width * 7, height * 2, width, height),
         desiredWidth, desiredHeight);
-    dieLeft[7] = Utility.scaleImage(
+    dieLeft[8] = Utility.scaleImage(
         getImage().getSubimage(width * 8, height * 2, width, height),
         desiredWidth, desiredHeight);
 
     dieRight[0] = Utility.mirrorScaleImage(
-        getImage().getSubimage(width, height * 2, width, height), desiredWidth,
+        getImage().getSubimage(0, height * 2, width, height), desiredWidth,
         desiredHeight);
     dieRight[1] = Utility.mirrorScaleImage(
+        getImage().getSubimage(width, height * 2, width, height), desiredWidth,
+        desiredHeight);
+    dieRight[2] = Utility.mirrorScaleImage(
         getImage().getSubimage(width * 2, height * 2, width, height),
         desiredWidth, desiredHeight);
-    dieRight[2] = Utility.mirrorScaleImage(
+    dieRight[3] = Utility.mirrorScaleImage(
         getImage().getSubimage(width * 3, height * 2, width, height),
         desiredWidth, desiredHeight);
-    dieRight[3] = Utility.mirrorScaleImage(
+    dieRight[4] = Utility.mirrorScaleImage(
         getImage().getSubimage(width * 4, height * 2, width, height),
         desiredWidth, desiredHeight);
-    dieRight[4] = Utility.mirrorScaleImage(
+    dieRight[5] = Utility.mirrorScaleImage(
         getImage().getSubimage(width * 5, height * 2, width, height),
         desiredWidth, desiredHeight);
-    dieRight[5] = Utility.mirrorScaleImage(
+    dieRight[6] = Utility.mirrorScaleImage(
         getImage().getSubimage(width * 6, height * 2, width, height),
         desiredWidth, desiredHeight);
-    dieRight[6] = Utility.mirrorScaleImage(
+    dieRight[7] = Utility.mirrorScaleImage(
         getImage().getSubimage(width * 7, height * 2, width, height),
         desiredWidth, desiredHeight);
-    dieRight[7] = Utility.mirrorScaleImage(
+    dieRight[8] = Utility.mirrorScaleImage(
         getImage().getSubimage(width * 8, height * 2, width, height),
         desiredWidth, desiredHeight);
+  }
+
+  private boolean withinVision(final Vector2f heroPos) {
+    boolean result = false;
+
+    final Vector2f c = getCenterPosition().sub(heroPos);
+    result = c.lenSqr() < 25;
+
+    return result;
+  }
+
+  private boolean isLeft(final Vector2f heroPos) {
+    boolean result = false;
+
+    if (heroPos.x < getCenterPosition().x) {
+      result = true;
+    }
+
+    return result;
+  }
+
+  /**
+   * This method provides a left velocity of 2 units/second.
+   */
+  public void moveLeft() {
+    setVelocity(new Vector2f(-1.5f, getVelocity().y));
+    facingRight = false;
+    action = Action.MOVE;
+  }
+
+  /**
+   * This method provides a right velocity of 2 units/second.
+   */
+  public void moveRight() {
+    setVelocity(new Vector2f(1.5f, getVelocity().y));
+    facingRight = true;
+    action = Action.MOVE;
   }
 }

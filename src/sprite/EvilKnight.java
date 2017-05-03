@@ -37,14 +37,14 @@ public class EvilKnight extends CollidableSprite {
   private int                   dieRightIndex;
   private float                 animationTime;
   private Action                action;
-  private final boolean         facingRight;
+  private boolean               facingRight;
 
   public EvilKnight(final float xPos, final float yPos, final int width,
       final int height, final BufferedImage image, final Collider col) {
     super(xPos, yPos, width, height, image, col);
     initAnimations();
     // Default starting state
-    action = Action.STAND;
+    action = Action.BLOCK;
     facingRight = false;
   }
 
@@ -53,7 +53,7 @@ public class EvilKnight extends CollidableSprite {
    */
   public void attack() {
     switch (action) {
-      case STAND:
+      case BLOCK:
         action = Action.ATTACK;
         resetState();
         break;
@@ -66,7 +66,6 @@ public class EvilKnight extends CollidableSprite {
     if ((action != Action.BLOCK) || (action != Action.DEAD)) {
       action = Action.DEAD;
     }
-    resetState();
   }
 
   /**
@@ -83,12 +82,26 @@ public class EvilKnight extends CollidableSprite {
     super.uncollide(direction);
   }
 
-  @Override
-  public void updateWorld(final float delta) {
+  public void updateWorld(final float delta, final Vector2f heroPos) {
     setVelocity(getVelocity().sub(new Vector2f(0, EvilKnight.GRAVITY * delta)));
     setCenterPosition(getCenterPosition().add(getVelocity().mul(delta)));
     // Set the origin in the matrix
     setWorld(Matrix3x3f.translate(getCenterPosition()));
+
+    if (withinRange(heroPos) && (action != Action.DEAD)) {
+      attack();
+
+      if (isLeft(heroPos)) {
+        facingRight = false;
+      }
+      else {
+        facingRight = true;
+      }
+    }
+    else if (action != Action.DEAD) {
+      action = Action.BLOCK;
+    }
+
     animationTime += delta;
     // Here the animation state is determined and the proper frame of animation
     // from the animation arrays is selected. The power of modulus is really
@@ -125,14 +138,15 @@ public class EvilKnight extends CollidableSprite {
         }
         break;
       case DEAD:
-        if (!facingRight) {
+        if (!facingRight && (dieLeftIndex != (dieLeft.length - 1))) {
           if ((animationTime > 0.25f)) {
             dieLeftIndex = ++dieLeftIndex % dieLeft.length;
             animationTime -= 0.25f;
           }
         }
         else {
-          if ((animationTime > 0.25f)) {
+          if (((animationTime > 0.25f)
+              && (dieRightIndex != (dieRight.length - 1)))) {
             dieRightIndex = ++dieRightIndex % dieRight.length;
             animationTime -= 0.25f;
           }
@@ -196,7 +210,7 @@ public class EvilKnight extends CollidableSprite {
         break;
     }
     // Draw the collider shapes if necessary
-    if (drawCollider) {
+    if (drawCollider && (getCollider() != null)) {
       getCollider().render(g, screen);
     }
   }
@@ -295,5 +309,24 @@ public class EvilKnight extends CollidableSprite {
     dieRight[7] = Utility.scaleImage(
         getImage().getSubimage(width * 3, height * 3, width, height),
         desiredWidth, desiredHeight);
+  }
+
+  private boolean withinRange(final Vector2f heroPos) {
+    boolean result = false;
+
+    final Vector2f c = getCenterPosition().sub(heroPos);
+    result = c.lenSqr() < 4;
+
+    return result;
+  }
+
+  private boolean isLeft(final Vector2f heroPos) {
+    boolean result = false;
+
+    if (heroPos.x < getCenterPosition().x) {
+      result = true;
+    }
+
+    return result;
   }
 }

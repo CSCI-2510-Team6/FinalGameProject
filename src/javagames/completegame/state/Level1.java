@@ -116,8 +116,8 @@ public class Level1 extends State {
     hero.updateWorld(delta);
     int collisionDirection;
 
-    grunt.updateWorld(delta);
-    evilKnight.updateWorld(delta);
+    grunt.updateWorld(delta, hero.getCenterPosition());
+    evilKnight.updateWorld(delta, hero.getCenterPosition());
 
     // Handle hero interaction with the stage
     while ((collisionDirection = colliderManager.determineCollisionDirection(
@@ -225,6 +225,18 @@ public class Level1 extends State {
    */
   public void updateShot(final float delta, final CollidableSprite shot) {
     shot.updateWorld(delta);
+
+    if (colliderManager.checkCollidersForInnerIntersection(shot.getCollider(),
+        evilKnight.getCollider())) {
+      evilKnight.handleInjury();
+      shots.remove(shot);
+    }
+
+    if (colliderManager.checkCollidersForInnerIntersection(shot.getCollider(),
+        grunt.getCollider())) {
+      grunt.handleInjury();
+      shots.remove(shot);
+    }
 
     // See if shot left stage
     if (!colliderManager.checkCollidersForOuterIntersection(shot.getCollider(),
