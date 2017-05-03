@@ -6,24 +6,25 @@ iceCastle.jpeg
 http://www.desktop-image.com/game/2d-game-backgrounds-5/
 
 Forest1.png
-http://www.gameart2d.com/free-platformer-game-tileset.html
-
 Forest2.png
 http://www.gameart2d.com/free-platformer-game-tileset.html
 
 CastleLevel.png
 https://opengameart.org/content/spooky-castle-tileset
+author: Buch
 
 characters
 
 fumiko.png
 https://opengameart.org/content/fumiko-complete-charset
+author: skoam
 
 knightSheet.png
 http://realm667.com/index.php/en/beastiary-mainmenu-136-69621/other-style#preview-6
 
 Knight Sprites.png
 https://opengameart.org/content/knight-and-knight-animation
+author: trashmney034
 
 other
 

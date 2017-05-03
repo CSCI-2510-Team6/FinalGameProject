@@ -7,3 +7,10 @@ author: cynicmusic
 swish.wav
 https://opengameart.org/content/swishes-sound-pack
 author: artisticdude
+
+blip_Select8.wav
+Jump17.wav
+Pickup_Coin18.wav
+Randomize13.wav
+https://opengameart.org/content/100-plus-game-sound-effects-wavoggm4a
+author: Damaged Panda
