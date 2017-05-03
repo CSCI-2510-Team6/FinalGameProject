@@ -63,7 +63,7 @@ public class EvilKnight extends CollidableSprite {
   }
 
   public void handleInjury() {
-    if ((action != Action.BLOCK) || (action != Action.DEAD)) {
+    if (action == Action.ATTACK) {
       action = Action.DEAD;
     }
   }
