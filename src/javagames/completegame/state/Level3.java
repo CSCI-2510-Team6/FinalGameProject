@@ -14,6 +14,8 @@ import javagames.util.KeyboardInput;
 import javagames.util.Matrix3x3f;
 import javagames.util.Vector2f;
 import sprite.CollidableSprite;
+import sprite.EvilKnight;
+import sprite.Grunt;
 import sprite.Sorceress;
 import sprite.Sprite;
 
@@ -23,6 +25,8 @@ public class Level3 extends State {
   private ColliderManager        colliderManager;
   private CollidableSprite       background;
   private Sorceress              hero;
+  private Grunt                  grunt;
+  private EvilKnight             evilKnight;
   private KeyboardInput          keys;
   private boolean                drawBounds;
   private Hud                    hud;
@@ -31,6 +35,7 @@ public class Level3 extends State {
   private final GameState        state;
   private List<CollidableSprite> shots;
   private QuickRestart           daggerSound;
+  private float                  invincibilityTime;
 
   public Level3(final GameState state) {
     this.state = state;
@@ -45,6 +50,16 @@ public class Level3 extends State {
         (BufferedImage) controller.getAttribute("airSlashImage"));
     hero.setCenterPosition(new Vector2f(-25, 0));
 
+    grunt = (Grunt) controller.getAttribute("grunt");
+    grunt.setCenterPosition(new Vector2f(-20, 0));
+    grunt.resetState();
+    grunt.defaultAction();
+
+    evilKnight = (EvilKnight) controller.getAttribute("evilKnight");
+    evilKnight.setCenterPosition(new Vector2f(20, 0));
+    evilKnight.resetState();
+    evilKnight.defaultAction();
+
     daggerSound = (QuickRestart) controller.getAttribute("airSlashSound");
     camera = new Camera(hero.getCenterPosition());
 
@@ -56,6 +71,7 @@ public class Level3 extends State {
     drawBounds = false;
     shots = new ArrayList<>();
     keys = (KeyboardInput) controller.getAttribute("keys");
+    invincibilityTime = 0.0f;
   }
 
   @Override
@@ -104,10 +120,43 @@ public class Level3 extends State {
     hero.updateWorld(delta);
     int collisionDirection;
 
+    grunt.updateWorld(delta, hero.getCenterPosition());
+    evilKnight.updateWorld(delta, hero.getCenterPosition());
+
     // Handle hero interaction with the stage
     while ((collisionDirection = colliderManager.determineCollisionDirection(
         hero.getCollider(), background.getCollider())) != 0) {
       hero.uncollide(collisionDirection);
+    }
+
+    while ((collisionDirection = colliderManager.determineCollisionDirection(
+        grunt.getCollider(), background.getCollider())) != 0) {
+      grunt.uncollide(collisionDirection);
+    }
+
+    while ((collisionDirection = colliderManager.determineCollisionDirection(
+        evilKnight.getCollider(), background.getCollider())) != 0) {
+      evilKnight.uncollide(collisionDirection);
+    }
+
+    invincibilityTime += delta;
+    // Handle interaction between the hero and enemy
+    if (colliderManager.checkCollidersForInnerIntersection(hero.getCollider(),
+        evilKnight.getCollider())) {
+      hero.handleInjury();
+      if (invincibilityTime > 1.0f) {
+        state.setHearts(state.getHearts() - 1);
+        invincibilityTime = 0.0f;
+      }
+    }
+
+    if (colliderManager.checkCollidersForInnerIntersection(hero.getCollider(),
+        grunt.getCollider())) {
+      hero.handleInjury();
+      if (invincibilityTime > 1.0f) {
+        state.setHearts(state.getHearts() - 1);
+        invincibilityTime = 0.0f;
+      }
     }
 
     updateShots(delta);
@@ -115,6 +164,7 @@ public class Level3 extends State {
     hud.update(delta);
     checkForLevelWon();
     checkForOutOfBounds();
+    checkForEmptyHearts();
   }
 
   private void checkForLevelWon() {
@@ -130,6 +180,13 @@ public class Level3 extends State {
     }
   }
 
+  private void checkForEmptyHearts() {
+    if (state.getHearts() < 1) {
+      hero.setCenterPosition(new Vector2f(-25f, 0f));
+      state.setHearts(3);
+    }
+  }
+
   @Override
   public void render(final Graphics2D g, final Matrix3x3f view) {
     // begin of camera
@@ -139,6 +196,9 @@ public class Level3 extends State {
     for (final CollidableSprite shot : shots) {
       shot.render(g, view, drawBounds);
     }
+
+    grunt.render(g, view, drawBounds);
+    evilKnight.render(g, view, drawBounds);
 
     hero.render(g, view, drawBounds);
     // end of camera
@@ -169,6 +229,18 @@ public class Level3 extends State {
    */
   public void updateShot(final float delta, final CollidableSprite shot) {
     shot.updateWorld(delta);
+
+    if (colliderManager.checkCollidersForInnerIntersection(shot.getCollider(),
+        evilKnight.getCollider())) {
+      evilKnight.handleInjury();
+      shots.remove(shot);
+    }
+
+    if (colliderManager.checkCollidersForInnerIntersection(shot.getCollider(),
+        grunt.getCollider())) {
+      grunt.handleInjury();
+      shots.remove(shot);
+    }
 
     // See if shot left stage
     if (!colliderManager.checkCollidersForOuterIntersection(shot.getCollider(),

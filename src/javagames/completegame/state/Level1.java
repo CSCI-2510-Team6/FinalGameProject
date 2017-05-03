@@ -52,9 +52,13 @@ public class Level1 extends State {
 
     grunt = (Grunt) controller.getAttribute("grunt");
     grunt.setCenterPosition(new Vector2f(-40, 0));
+    grunt.resetState();
+    grunt.defaultAction();
 
     evilKnight = (EvilKnight) controller.getAttribute("evilKnight");
-    evilKnight.setCenterPosition(new Vector2f(-35, 0));
+    evilKnight.setCenterPosition(new Vector2f(40, 0));
+    evilKnight.resetState();
+    evilKnight.defaultAction();
 
     daggerSound = (QuickRestart) controller.getAttribute("airSlashSound");
     camera = new Camera(hero.getCenterPosition());
