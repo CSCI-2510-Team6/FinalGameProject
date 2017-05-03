@@ -522,6 +522,46 @@ public class LoadGame extends State {
       return Boolean.TRUE;
     });
 
+    loadTasks.add(() -> {
+      final byte[] soundBytes = loadSound("Blip_Select8.wav");
+      final QuickRestart restartClip =
+          new QuickRestart(new BlockingDataLine(soundBytes));
+      restartClip.initialize();
+      restartClip.open();
+      controller.setAttribute("shieldHit", restartClip);
+      return Boolean.TRUE;
+    });
+
+    loadTasks.add(() -> {
+      final byte[] soundBytes = loadSound("Jump17.wav");
+      final QuickRestart restartClip =
+          new QuickRestart(new BlockingDataLine(soundBytes));
+      restartClip.initialize();
+      restartClip.open();
+      controller.setAttribute("jumpSound", restartClip);
+      return Boolean.TRUE;
+    });
+
+    loadTasks.add(() -> {
+      final byte[] soundBytes = loadSound("Pickup_Coin18.wav");
+      final QuickRestart restartClip =
+          new QuickRestart(new BlockingDataLine(soundBytes));
+      restartClip.initialize();
+      restartClip.open();
+      controller.setAttribute("continue", restartClip);
+      return Boolean.TRUE;
+    });
+
+    loadTasks.add(() -> {
+      final byte[] soundBytes = loadSound("Randomize13.wav");
+      final QuickRestart restartClip =
+          new QuickRestart(new BlockingDataLine(soundBytes));
+      restartClip.initialize();
+      restartClip.open();
+      controller.setAttribute("deathSound", restartClip);
+      return Boolean.TRUE;
+    });
+
     loadResults = new ArrayList<>();
     for (final Callable<Boolean> task : loadTasks) {
       loadResults.add(threadPool.submit(task));

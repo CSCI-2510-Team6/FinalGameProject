@@ -98,6 +98,43 @@ public class CompleteGame extends WindowFramework {
       event.shutDown();
       System.out.println("Done: airSlashSound");
     }
+
+    final QuickRestart event1 =
+        (QuickRestart) controller.getAttribute("shieldHit");
+    if (event1 != null) {
+      System.out.println("Sound: shieldHit");
+      event1.close();
+      event1.shutDown();
+      System.out.println("Done: shieldHit");
+    }
+
+    final QuickRestart event2 =
+        (QuickRestart) controller.getAttribute("jumpSound");
+    if (event2 != null) {
+      System.out.println("Sound: jumpSound");
+      event2.close();
+      event2.shutDown();
+      System.out.println("Done: jumpSound");
+    }
+
+    final QuickRestart event3 =
+        (QuickRestart) controller.getAttribute("continue");
+    if (event3 != null) {
+      System.out.println("Sound: continue");
+      event3.close();
+      event3.shutDown();
+      System.out.println("Done: continue");
+    }
+
+    final QuickRestart event4 =
+        (QuickRestart) controller.getAttribute("deathSound");
+    if (event4 != null) {
+      System.out.println("Sound: deathSound");
+      event4.close();
+      event4.shutDown();
+      System.out.println("Done: deathSound");
+    }
+
   }
 
   public static void main(final String[] args) {

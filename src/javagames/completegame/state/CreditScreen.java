@@ -21,79 +21,73 @@ import javagames.util.Utility;
 public class CreditScreen extends State {
 
   private KeyboardInput keys;
-  private String[]        		 textB   = new String[8];
-  protected Dialogue      dialog = new Dialogue();
-  private int					 index;
-  
-  public CreditScreen()
-  {
+  private String[]      textB  = new String[8];
+  protected Dialogue    dialog = new Dialogue();
+  private int           index;
+
+  public CreditScreen() {
     for (int x = 0; x < textB.length; x++) {
-        textB[x] = "";
-      }
+      textB[x] = "";
+    }
   }
 
   // Text for the credits
-  private static final String[] creditInfo =
-      { "Wonder Keith and No Brothers - version 1.0",
-          "Programmed by: Kristopher Davlin, Paul Growney, Tyler Veseth, Andres Ward",
-          "Special thanks to:", "Timothy Wright", };
+  private static final String[] creditInfo = {
+      "Wonder Keith and No Brothers - version 1.0",
+      "Programmed by: Kristopher Davlin, Paul Growney, Tyler Veseth, Andres Ward",
+      "Special thanks to:", "Timothy Wright", "cynicmusic", "artisticdude",
+      "Damaged Panda", "Buch", "skoam", "trashmney034", "Matheus Carvalho" };
 
   @Override
   public void enter() {
     super.enter();
     keys = (KeyboardInput) controller.getAttribute("keys");
-    // Replace background parameter with actual background to be used
-    // background = (Sprite) controller.getAttribute("background");
   }
 
   @Override
   public void processInput(final float delta) {
-	if(textB == null)
-	{
-	    super.processInput(delta);
-	
-	    if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
-	      getController().setState(new TitleScreen());
-	    }
+    if (textB == null) {
+      super.processInput(delta);
+
+      if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
+        getController().setState(new TitleScreen());
+      }
     }
-	else
-	{
-	 if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
-	      if (index < textB.length) {
-	        textB[index] = dialog.LevelThreeBDialogue();
-	        index++;
-	      }
-	      else {
-	        textB = null;
-	        index = 0;
-	      }
-	    }
-	}
+    else {
+      if (keys.keyDownOnce(KeyEvent.VK_SPACE)) {
+        if (index < textB.length) {
+          textB[index] = dialog.LevelThreeBDialogue();
+          index++;
+        }
+        else {
+          textB = null;
+          index = 0;
+        }
+      }
+    }
   }
 
   @Override
   public void render(final Graphics2D g, final Matrix3x3f view) {
-	  
-	  if (textB != null) 
-	    {
-		    g.setFont(new Font("Arial", Font.PLAIN, 20));
-		    g.setColor(Color.ORANGE);
 
-	      Utility.drawString(g, 10, 100, textB);
+    if (textB != null) {
+      g.setFont(new Font("Arial", Font.PLAIN, 20));
+      g.setColor(Color.ORANGE);
 
-	    }
-	  else
-	  {
-	    super.render(g, view);
-	
-	    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-	        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-	
-	    g.setFont(new Font("Arial", Font.PLAIN, 20));
-	    g.setColor(Color.GREEN);
-	
-	    Utility.drawCenteredString(g, app.getScreenWidth(),
-	        app.getScreenHeight() / 3, CreditScreen.creditInfo);
-	  }
+      Utility.drawString(g, 10, 100, textB);
+
+    }
+    else {
+      super.render(g, view);
+
+      g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+          RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+      g.setFont(new Font("Arial", Font.PLAIN, 20));
+      g.setColor(Color.GREEN);
+
+      Utility.drawCenteredString(g, app.getScreenWidth(),
+          app.getScreenHeight() / 3, CreditScreen.creditInfo);
+    }
   }
 }

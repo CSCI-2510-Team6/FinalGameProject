@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 
+import javagames.completegame.admin.QuickRestart;
 import javagames.util.Dialogue;
 import javagames.util.KeyboardInput;
 import javagames.util.Matrix3x3f;
@@ -20,6 +21,7 @@ import javagames.util.Utility;
  */
 public class TitleScreen extends State {
 
+  private QuickRestart    continueSound;
   protected KeyboardInput keys;
   protected Dialogue      dialog = new Dialogue();
   int                     index  = 0;
@@ -38,8 +40,7 @@ public class TitleScreen extends State {
     super.enter();
     keys = (KeyboardInput) controller.getAttribute("keys");
 
-    // Replace background parameter with actual background to be used
-    // background = (Sprite) controller.getAttribute("background");
+    continueSound = (QuickRestart) controller.getAttribute("continue");
   }
 
   @Override
@@ -51,6 +52,7 @@ public class TitleScreen extends State {
         msg = null;
         text[index] = dialog.LevelOneDialogue();
         index++;
+        continueSound.fire();
       }
       else {
         text = null;

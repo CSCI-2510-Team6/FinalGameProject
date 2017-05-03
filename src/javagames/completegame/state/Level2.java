@@ -39,6 +39,10 @@ public class Level2 extends State {
   private final GameState        state;
   private List<CollidableSprite> shots;
   private QuickRestart           daggerSound;
+  private QuickRestart           jumpSound;
+  private QuickRestart           deathSound;
+  private QuickRestart           shieldHit;
+  private QuickRestart           continueSound;
   private float                  invincibilityTime;
   private boolean                dialogFlag;
   private int                    index;
@@ -74,6 +78,10 @@ public class Level2 extends State {
     evilKnight.defaultAction();
 
     daggerSound = (QuickRestart) controller.getAttribute("airSlashSound");
+    jumpSound = (QuickRestart) controller.getAttribute("jumpSound");
+    deathSound = (QuickRestart) controller.getAttribute("deathSound");
+    shieldHit = (QuickRestart) controller.getAttribute("shieldHit");
+    continueSound = (QuickRestart) controller.getAttribute("continue");
     camera = new Camera(hero.getCenterPosition());
 
     hudDisplay = (Sprite) controller.getAttribute("hudDisplay");
@@ -109,6 +117,7 @@ public class Level2 extends State {
       if (keys.keyDown(KeyEvent.VK_J) && !hero.isJumpButtonHeld()
           && !hero.isInAir() && !hero.isJumpDisabled()) {
         hero.pressJumpButton();
+        jumpSound.fire();
       }
       // Handles variable jump based on length of time jump button is pressed
       if (hero.isJumpButtonHeld()) {
@@ -133,6 +142,7 @@ public class Level2 extends State {
         if (index < text.length) {
           text[index] = dialog.LevelTwoDialogue();
           index++;
+          continueSound.fire();
         }
         else {
           text = null;
@@ -207,6 +217,7 @@ public class Level2 extends State {
   private void checkForOutOfBounds() {
     if (hero.getCenterPosition().y < -5.5f) {
       hero.setCenterPosition(new Vector2f(-45f, 0f));
+      deathSound.fire();
     }
   }
 
@@ -214,6 +225,7 @@ public class Level2 extends State {
     if (state.getHearts() < 1) {
       hero.setCenterPosition(new Vector2f(-45f, 0f));
       state.setHearts(3);
+      deathSound.fire();
     }
   }
 
@@ -273,7 +285,9 @@ public class Level2 extends State {
 
     if (colliderManager.checkCollidersForInnerIntersection(shot.getCollider(),
         evilKnight.getCollider())) {
-      evilKnight.handleInjury();
+      if (evilKnight.handleInjury()) {
+        shieldHit.fire();
+      }
       shots.remove(shot);
     }
 
